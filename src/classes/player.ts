@@ -1,3 +1,5 @@
+import { Input } from 'phaser';
+import { EVENTS_NAME } from '../consts';
 import { Actor } from './actor';
 import { Text } from './text';
 export class Player extends Actor {
@@ -6,6 +8,7 @@ export class Player extends Actor {
     private keyS: Phaser.Input.Keyboard.Key;
     private keyD: Phaser.Input.Keyboard.Key;
     private hpValue: Text;
+    private keySpace: Input.Keyboard.Key;
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, 'king');
         // KEYS
@@ -17,6 +20,11 @@ export class Player extends Actor {
         this.hpValue = new Text(this.scene, this.x, this.y - this.height, this.hp.toString())
             .setFontSize(12)
             .setOrigin(0.8, 0.5);
+        this.keySpace = this.scene.input.keyboard.addKey(32);
+        this.keySpace.on('down', (event: KeyboardEvent) => {
+            this.anims.play('attack', true);
+            this.scene.game.events.emit(EVENTS_NAME.attack);
+        });
 
         // PHYSICS
         this.getBody().setSize(30, 30);
