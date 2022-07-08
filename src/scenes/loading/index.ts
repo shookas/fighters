@@ -22,5 +22,10 @@ export class LoadingScene extends Scene {
         });
         this.load.tilemapTiledJSON('dungeon', 'tilemaps/json/dungeon.json');
 
+        // CHEST LOADING
+        this.load.spritesheet('tiles_spr', 'tilemaps/tiles/dungeon-16-16.png', {
+            frameWidth: 16,
+            frameHeight: 16,
+        });
     }
 }
