@@ -2,6 +2,7 @@ import { Scene, Tilemaps } from 'phaser';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
 import { Player } from '../../classes/player';
 import { EVENTS_NAME } from '../../consts';
+import { Enemy } from '../../classes/enemy';
 export class Level1 extends Scene {
     private player!: Player;
     private map!: Tilemaps.Tilemap;
@@ -9,6 +10,7 @@ export class Level1 extends Scene {
     private wallsLayer!: Tilemaps.TilemapLayer;
     private groundLayer!: Tilemaps.TilemapLayer;
     private chests!: Phaser.GameObjects.Sprite[];
+    private enemies!: Enemy[];
     constructor() {
         super('level-1-scene');
     }
@@ -17,6 +19,7 @@ export class Level1 extends Scene {
         this.player = new Player(this, 100, 100);
         this.initChests()
         this.initCamera()
+        this.initEnemies();
 
         this.physics.add.collider(this.player, this.wallsLayer);
     }
@@ -56,7 +59,7 @@ export class Level1 extends Scene {
                 this.game.events.emit(EVENTS_NAME.chestLoot);
                 obj2.destroy();
                 this.cameras.main.flash();
-              });
+            });
         });
     }
 
@@ -64,5 +67,21 @@ export class Level1 extends Scene {
         this.cameras.main.setSize(this.game.scale.width, this.game.scale.height);
         this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
         this.cameras.main.setZoom(2);
+    }
+
+    private initEnemies(): void {
+        const enemiesPoints = gameObjectsToObjectPoints(
+            this.map.filterObjects('Enemies', (obj) => obj.name === 'EnemyPoint'),
+        );
+        this.enemies = enemiesPoints.map((enemyPoint) =>
+            new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, 503)
+                .setName(enemyPoint.id.toString())
+                .setScale(1.5),
+        );
+        this.physics.add.collider(this.enemies, this.wallsLayer);
+        this.physics.add.collider(this.enemies, this.enemies);
+        this.physics.add.collider(this.player, this.enemies, (obj1, obj2) => {
+            (obj1 as Player).getDamage(1);
+        });
     }
 }
