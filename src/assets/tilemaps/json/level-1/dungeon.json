@@ -95,7 +95,7 @@
           {
            "draworder":"topdown",
            "id":5,
-           "name":"Enemies",
+           "name":"Enemies-lv1",
            "objects":[
                   {
                    "height":0,
@@ -153,7 +153,7 @@
            "imageheight":512,
            "imagewidth":512,
            "margin":0,
-           "name":"dungeon",
+           "name":"level1",
            "spacing":0,
            "tilecount":1024,
            "tileheight":16,

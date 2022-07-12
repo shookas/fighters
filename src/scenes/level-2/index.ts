@@ -10,7 +10,8 @@ export class Level2 extends Scene {
     private wallsLayer!: Tilemaps.TilemapLayer;
     private groundLayer!: Tilemaps.TilemapLayer;
     private chests!: Phaser.GameObjects.Sprite[];
-    private enemies!: Enemy[];
+    private enemiesLv1!: Enemy[];
+    private enemiesLv2!: Enemy[];
 
     constructor() {
         super('level-2-scene');
@@ -20,7 +21,8 @@ export class Level2 extends Scene {
         this.player = new Player(this, 100, 100);
         this.initChests()
         this.initCamera()
-        this.initEnemies();
+        this.initEnemiesLv1();
+        this.initEnemiesLv2();
         this.physics.add.collider(this.player, this.wallsLayer);
     }
 
@@ -69,19 +71,34 @@ export class Level2 extends Scene {
         this.cameras.main.setZoom(2);
     }
 
-    private initEnemies(): void {
-        const enemiesPoints = gameObjectsToObjectPoints(
-            this.map.filterObjects('Enemies', (obj) => obj.name === 'EnemyPoint'),
+    private initEnemiesLv1(): void {
+        const enemiesPointsLv1 = gameObjectsToObjectPoints(
+            this.map.filterObjects('Enemies-lv1', (obj) => obj.name === 'EnemyPoint'),
         );
-        this.enemies = enemiesPoints.map((enemyPoint) =>
+        this.enemiesLv1 = enemiesPointsLv1.map((enemyPoint) =>
             new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, 503)
                 .setName(enemyPoint.id.toString())
                 .setScale(1.5),
         );
-        this.physics.add.collider(this.enemies, this.wallsLayer);
-        this.physics.add.collider(this.enemies, this.enemies);
-        this.physics.add.collider(this.player, this.enemies, (obj1, obj2) => {
+        this.physics.add.collider(this.enemiesLv1, this.wallsLayer);
+        this.physics.add.collider(this.enemiesLv1, this.enemiesLv1);
+        this.physics.add.collider(this.player, this.enemiesLv1, (obj1, obj2) => {
             (obj1 as Player).getDamage(1);
+        });
+    }
+    private initEnemiesLv2(): void {
+        const enemiesPointsLv1 = gameObjectsToObjectPoints(
+            this.map.filterObjects('Enemies-lv2', (obj) => obj.name === 'EnemyPoint'),
+        );
+        this.enemiesLv2 = enemiesPointsLv1.map((enemyPoint) =>
+            new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, 375)
+                .setName(enemyPoint.id.toString())
+                .setScale(1.5),
+        );
+        this.physics.add.collider(this.enemiesLv2, this.wallsLayer);
+        this.physics.add.collider(this.enemiesLv2, this.enemiesLv2);
+        this.physics.add.collider(this.player, this.enemiesLv2, (obj1, obj2) => {
+            (obj1 as Player).getDamage(2);
         });
     }
 

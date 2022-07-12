@@ -29,8 +29,8 @@ export class Level1 extends Scene {
     }
 
     private initMap(): void {
-        this.map = this.make.tilemap({ key: 'dungeon', tileWidth: 16, tileHeight: 16 });
-        this.tileset = this.map.addTilesetImage('dungeon', 'tiles');
+        this.map = this.make.tilemap({ key: 'level1', tileWidth: 16, tileHeight: 16 });
+        this.tileset = this.map.addTilesetImage('level1', 'tiles');
         this.groundLayer = this.map.createLayer('Ground', this.tileset, 0, 0);
         this.wallsLayer = this.map.createLayer('Walls', this.tileset, 0, 0);
         this.wallsLayer.setCollisionByProperty({ collides: true });
@@ -71,7 +71,7 @@ export class Level1 extends Scene {
 
     private initEnemies(): void {
         const enemiesPoints = gameObjectsToObjectPoints(
-            this.map.filterObjects('Enemies', (obj) => obj.name === 'EnemyPoint'),
+            this.map.filterObjects('Enemies-lv1', (obj) => obj.name === 'EnemyPoint'),
         );
         this.enemies = enemiesPoints.map((enemyPoint) =>
             new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, 503)
