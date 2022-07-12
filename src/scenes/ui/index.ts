@@ -7,13 +7,20 @@ export class UIScene extends Scene {
     private score!: Score;
     private gameEndPhrase!: Text;
     private gameEndHandler: (status: GameStatus) => void;
+    private nextLevelHandler: (levelFinished: number) => void;
     private chestLootHandler: () => void;
     constructor() {
         super('ui-scene');
         this.chestLootHandler = () => {
             this.score.changeValue(ScoreOperations.INCREASE, 10);
             if (this.score.getValue() === gameConfig.winScore) {
-                this.game.events.emit(EVENTS_NAME.gameEnd, 'win');
+                const finishedLevel = this.game.scene.getScenes().filter(Boolean).find(scene => scene.scene.isActive() && scene.registry.get('level'));
+                this.score.changeValue(ScoreOperations.SET_VALUE, 0);
+                if (finishedLevel) {
+                    this.game.events.emit(EVENTS_NAME.nextLevel, finishedLevel?.registry.get('level'));
+                } else {
+                    this.game.events.emit(EVENTS_NAME.gameEnd)
+                }
             }
         }
 
@@ -42,6 +49,11 @@ export class UIScene extends Scene {
                 this.scene.restart();
             });
         }
+
+        this.nextLevelHandler = (levelFinished) => {
+            this.scene.get(`level-${levelFinished}-scene`).scene.stop();
+            this.scene.get(`level-${levelFinished + 1}-scene`).scene.start();
+        }
     }
     create(): void {
         this.score = new Score(this, 20, 20, 0);
@@ -51,5 +63,6 @@ export class UIScene extends Scene {
     private initListeners(): void {
         this.game.events.on(EVENTS_NAME.chestLoot, this.chestLootHandler, this);
         this.game.events.once(EVENTS_NAME.gameEnd, this.gameEndHandler, this);
+        this.game.events.once(EVENTS_NAME.nextLevel, this.nextLevelHandler, this);
     }
 }

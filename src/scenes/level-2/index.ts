@@ -3,7 +3,7 @@ import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-po
 import { Player } from '../../classes/player';
 import { EVENTS_NAME } from '../../consts';
 import { Enemy } from '../../classes/enemy';
-export class Level1 extends Scene {
+export class Level2 extends Scene {
     private player!: Player;
     private map!: Tilemaps.Tilemap;
     private tileset!: Tilemaps.Tileset;
@@ -11,8 +11,9 @@ export class Level1 extends Scene {
     private groundLayer!: Tilemaps.TilemapLayer;
     private chests!: Phaser.GameObjects.Sprite[];
     private enemies!: Enemy[];
+
     constructor() {
-        super('level-1-scene');
+        super('level-2-scene');
     }
     create(): void {
         this.initMap();
@@ -20,7 +21,6 @@ export class Level1 extends Scene {
         this.initChests()
         this.initCamera()
         this.initEnemies();
-        this.registry.set('level', 1)
         this.physics.add.collider(this.player, this.wallsLayer);
     }
 
@@ -29,8 +29,8 @@ export class Level1 extends Scene {
     }
 
     private initMap(): void {
-        this.map = this.make.tilemap({ key: 'dungeon', tileWidth: 16, tileHeight: 16 });
-        this.tileset = this.map.addTilesetImage('dungeon', 'tiles');
+        this.map = this.make.tilemap({ key: 'level2', tileWidth: 16, tileHeight: 16 });
+        this.tileset = this.map.addTilesetImage('level2', 'tiles');
         this.groundLayer = this.map.createLayer('Ground', this.tileset, 0, 0);
         this.wallsLayer = this.map.createLayer('Walls', this.tileset, 0, 0);
         this.wallsLayer.setCollisionByProperty({ collides: true });
@@ -84,4 +84,5 @@ export class Level1 extends Scene {
             (obj1 as Player).getDamage(1);
         });
     }
+
 }
