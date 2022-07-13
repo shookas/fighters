@@ -38,25 +38,30 @@ export class Player extends Actor {
         this.getBody().setVelocity(0);
         if (this.keyUp?.isDown) {
             this.body.velocity.y = -110;
-            !this.anims.isPlaying && this.anims.play('run', true);
+            this.playerMoves()
         }
         if (this.keyLeft?.isDown) {
             this.body.velocity.x = -110;
             this.checkFlip();
             this.getBody().setOffset(48, 15);
-            !this.anims.isPlaying && this.anims.play('run', true);
+            this.playerMoves()
         }
         if (this.keyDown?.isDown) {
             this.body.velocity.y = 110;
-            !this.anims.isPlaying && this.anims.play('run', true);
+            this.playerMoves()
         }
         if (this.keyRight?.isDown) {
             this.body.velocity.x = 110;
             this.checkFlip();
             this.getBody().setOffset(15, 15);
-            !this.anims.isPlaying && this.anims.play('run', true);
+            this.playerMoves()
         }
-        this.hpValue.setPosition(this.x -50 , this.y - 40);
+        this.hpValue.setPosition(this.x - 50, this.y - 40);
+    }
+
+    playerMoves() {
+        this.scene.game.events.emit(EVENTS_NAME.playerMoves);
+        !this.anims.isPlaying && this.anims.play('run', true);
     }
 
     private initAnimations(): void {

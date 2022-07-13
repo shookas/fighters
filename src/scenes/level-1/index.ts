@@ -74,7 +74,7 @@ export class Level1 extends Scene {
             this.map.filterObjects('Enemies-lv1', (obj) => obj.name === 'EnemyPoint'),
         );
         this.enemies = enemiesPoints.map((enemyPoint) =>
-            new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, 503)
+            new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, 'a-enemy-lv1', 503)
                 .setName(enemyPoint.id.toString())
                 .setScale(1.5),
         );
