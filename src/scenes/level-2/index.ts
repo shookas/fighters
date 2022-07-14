@@ -3,15 +3,19 @@ import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-po
 import { Player } from '../../classes/player';
 import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
 import { Enemy } from '../../classes/enemy';
+import { Actor } from 'src/classes/actor';
+import { doesNotMatch } from 'assert';
 export class Level2 extends Scene {
     private player!: Player;
     private map!: Tilemaps.Tilemap;
     private tileset!: Tilemaps.Tileset;
     private wallsLayer!: Tilemaps.TilemapLayer;
+    private doors!: Tilemaps.Tile[];
     private groundLayer!: Tilemaps.TilemapLayer;
     private chests!: Phaser.GameObjects.Sprite[];
     private enemiesLv1!: Enemy[];
     private enemiesLv2!: Enemy[];
+
 
     constructor() {
         super('level-2-scene');
@@ -36,9 +40,22 @@ export class Level2 extends Scene {
         this.groundLayer = this.map.createLayer('Ground', this.tileset, 0, 0);
         this.wallsLayer = this.map.createLayer('Walls', this.tileset, 0, 0);
         this.wallsLayer.setCollisionByProperty({ collides: true });
+        this.doors = this.wallsLayer.filterTiles((tile: Phaser.Tilemaps.Tile) => tile.properties.door);
+        this.doors.forEach(door => door.collisionCallback = ((collision: Actor, tile: Phaser.Tilemaps.Tile) => {
+            this.openDoors()
+        }))
 
         this.physics.world.setBounds(0, 0, this.wallsLayer.width, this.wallsLayer.height);
         process.env.NODE_ENV === 'dev' && this.showDebugWalls();
+    }
+
+    private openDoors() {
+        this.doors.forEach(tile => {
+            this.map.replaceByIndex(tile.index, tile.index + 3)
+            tile.resetCollision()
+            tile.collisionCallback = () => { };
+        })
+
     }
 
     private showDebugWalls(): void {
