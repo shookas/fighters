@@ -1,7 +1,7 @@
 import { Scene, Tilemaps } from 'phaser';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
 import { Player } from '../../classes/player';
-import { EVENTS_NAME } from '../../consts';
+import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
 import { Enemy } from '../../classes/enemy';
 export class Level2 extends Scene {
     private player!: Player;
@@ -38,7 +38,7 @@ export class Level2 extends Scene {
         this.wallsLayer.setCollisionByProperty({ collides: true });
 
         this.physics.world.setBounds(0, 0, this.wallsLayer.width, this.wallsLayer.height);
-        this.showDebugWalls();
+        process.env.NODE_ENV === 'dev' && this.showDebugWalls();
     }
 
     private showDebugWalls(): void {
@@ -76,7 +76,7 @@ export class Level2 extends Scene {
             this.map.filterObjects('Enemies-lv1', (obj) => obj.name === 'EnemyPoint'),
         );
         this.enemiesLv1 = enemiesPointsLv1.map((enemyPoint) =>
-            new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, '503')
+            new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, ENEMY_CONFIG.lv1)
                 .setName(enemyPoint.id.toString())
                 .setScale(1.5),
         );
@@ -91,7 +91,7 @@ export class Level2 extends Scene {
             this.map.filterObjects('Enemies-lv2', (obj) => obj.name === 'EnemyPoint'),
         );
         this.enemiesLv2 = enemiesPointsLv1.map((enemyPoint) =>
-            new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, '')
+            new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, ENEMY_CONFIG.lv2)
                 .setName(enemyPoint.id.toString())
                 .setScale(1.5),
         );

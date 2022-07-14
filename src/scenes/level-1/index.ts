@@ -1,8 +1,9 @@
 import { Scene, Tilemaps } from 'phaser';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
 import { Player } from '../../classes/player';
-import { EVENTS_NAME } from '../../consts';
+import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
 import { Enemy } from '../../classes/enemy';
+import { env } from 'process';
 export class Level1 extends Scene {
     private player!: Player;
     private map!: Tilemaps.Tilemap;
@@ -36,7 +37,7 @@ export class Level1 extends Scene {
         this.wallsLayer.setCollisionByProperty({ collides: true });
 
         this.physics.world.setBounds(0, 0, this.wallsLayer.width, this.wallsLayer.height);
-        this.showDebugWalls();
+        process.env.NODE_ENV === 'dev' && this.showDebugWalls();
     }
 
     private showDebugWalls(): void {
@@ -74,7 +75,7 @@ export class Level1 extends Scene {
             this.map.filterObjects('Enemies-lv1', (obj) => obj.name === 'EnemyPoint'),
         );
         this.enemies = enemiesPoints.map((enemyPoint) =>
-            new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, 'a-enemy-lv1', 503)
+            new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, ENEMY_CONFIG.lv1)
                 .setName(enemyPoint.id.toString())
                 .setScale(1.5),
         );

@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Tibia like pixel isomorphic game",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack serve",
+    "start:dev": "cross-env NODE_ENV=dev webpack serve",
+    "start:prod": "cross-env NODE_ENV=prod webpack serve",
     "build": "cross-env NODE_ENV=production webpack --progress"
   },
   "repository": {

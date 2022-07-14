@@ -1,4 +1,5 @@
 import { GameObjects, Scene, Tilemaps } from 'phaser';
+import { ENEMY_CONFIG } from '../../consts';
 export class LoadingScene extends Scene {
 
     constructor() {
@@ -15,7 +16,8 @@ export class LoadingScene extends Scene {
         this.load.image('king', 'sprites/king.png');
         // Our king atlas
         this.load.atlas('a-king', 'spritesheets/a-king.png', 'spritesheets/a-king_atlas.json');
-        this.load.atlas('a-enemy-lv1', 'tilemaps/tiles/dungeon-16-16.png', 'spritesheets/enemy-lv1_atlas.json');
+        this.load.atlas(ENEMY_CONFIG.lv1.runAnimationKey, 'tilemaps/tiles/dungeon-16-16.png', 'spritesheets/enemy-lv1_atlas.json');
+        this.load.atlas(ENEMY_CONFIG.lv2.runAnimationKey, 'tilemaps/tiles/dungeon-16-16.png', 'spritesheets/enemy-lv2_atlas.json');
 
         // MAP LOADING
         this.load.image({

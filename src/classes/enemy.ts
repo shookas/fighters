@@ -1,11 +1,16 @@
 import { EVENTS_NAME } from '../consts';
 import { Actor } from './actor';
 import { Player } from './player';
+
+export interface EnemyConfig {
+    startingFrame: number,
+    runAnimationKey: string,
+    initialHp: number;
+}
 export class Enemy extends Actor {
     private target: Player;
     private AGRESSOR_RADIUS = 100;
-    private runAnimationKey!: string;
-    private attackHandler: () => void;
+    private attackHandler: (damage: number) => void;
     private enemyFolows: () => void;
     constructor(
         scene: Phaser.Scene,
@@ -13,10 +18,10 @@ export class Enemy extends Actor {
         y: number,
         texture: string,
         target: Player,
-        private animationKey: string,
-        frame?: string | number,
+        private config: EnemyConfig
     ) {
-        super(scene, x, y, texture, frame);
+        super(scene, x, y, texture, config.startingFrame);
+        super.setHPValue(config.initialHp)
         this.target = target;
         // ADD TO SCENE
         scene.add.existing(this);
@@ -26,18 +31,20 @@ export class Enemy extends Actor {
         this.getBody().setOffset(0, 0);
         this.initAnimations()
 
-        this.attackHandler = () => {
+        this.attackHandler = (damage: number) => {
             if (
                 Phaser.Math.Distance.BetweenPoints(
                     { x: this.x, y: this.y },
                     { x: this.target.x, y: this.target.y },
                 ) < this.target.width
             ) {
-                this.getDamage();
-                this.disableBody(true, false);
-                this.scene.time.delayedCall(300, () => {
-                    this.destroy();
-                });
+                this.getDamage(damage);
+                if (!this.hp) {
+                    this.disableBody(true, false);
+                    this.scene.time.delayedCall(300, () => {
+                        this.destroy();
+                    });
+                }
             }
         }
 
@@ -48,7 +55,7 @@ export class Enemy extends Actor {
                     { x: this.target.x, y: this.target.y },
                 ) < this.AGRESSOR_RADIUS
             ) {
-                !this.anims.isPlaying && this.anims.play(this.animationKey, true);
+                !this.anims.isPlaying && this.anims.play(this.config.runAnimationKey, true);
                 this.getBody().setVelocityX(this.target.x - this.x);
                 this.getBody().setVelocityY(this.target.y - this.y);
             } else {
@@ -72,8 +79,8 @@ export class Enemy extends Actor {
 
     public initAnimations(): void {
         this.scene.anims.create({
-            key: this.animationKey,
-            frames: this.scene.anims.generateFrameNames(this.animationKey, {
+            key: this.config.runAnimationKey,
+            frames: this.scene.anims.generateFrameNames(this.config.runAnimationKey, {
                 prefix: 'run-',
                 end: 7,
             }),

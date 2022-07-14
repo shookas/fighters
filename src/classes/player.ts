@@ -2,7 +2,9 @@ import { Input } from 'phaser';
 import { EVENTS_NAME, GameStatus } from '../consts';
 import { Actor } from './actor';
 import { StatusBar } from './statusbar';
+
 export class Player extends Actor {
+    private damageModificator = 1;
     private keyUp: Phaser.Input.Keyboard.Key;
     private keyLeft: Phaser.Input.Keyboard.Key;
     private keyDown: Phaser.Input.Keyboard.Key;
@@ -21,7 +23,7 @@ export class Player extends Actor {
         this.keySpace = this.scene.input.keyboard.addKey(32);
         this.keySpace.on('down', (event: KeyboardEvent) => {
             this.anims.play('attack', true);
-            this.scene.game.events.emit(EVENTS_NAME.attack);
+            this.scene.game.events.emit(EVENTS_NAME.attack, this.damageModificator);
         });
 
         // PHYSICS
