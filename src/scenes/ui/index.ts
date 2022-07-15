@@ -43,8 +43,7 @@ export class UIScene extends Scene {
             );
 
             this.input.on('pointerdown', () => {
-                this.game.events.off(EVENTS_NAME.chestLoot, this.chestLootHandler);
-                this.game.events.off(EVENTS_NAME.gameEnd, this.gameEndHandler);
+                this.clearListeners()
                 this.scene.get('level-1-scene').scene.restart();
                 this.scene.restart();
             });
@@ -64,5 +63,11 @@ export class UIScene extends Scene {
         this.game.events.on(EVENTS_NAME.chestLoot, this.chestLootHandler, this);
         this.game.events.once(EVENTS_NAME.gameEnd, this.gameEndHandler, this);
         this.game.events.once(EVENTS_NAME.nextLevel, this.nextLevelHandler, this);
+    }
+    
+    private clearListeners() {
+        this.game.events.off(EVENTS_NAME.chestLoot, this.chestLootHandler);
+        this.game.events.off(EVENTS_NAME.gameEnd, this.gameEndHandler);
+        this.game.events.off(EVENTS_NAME.nextLevel, this.nextLevelHandler);
     }
 }

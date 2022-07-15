@@ -18,17 +18,15 @@ export class Player extends Actor {
         this.keyLeft = this.scene.input.keyboard.addKey('left');
         this.keyDown = this.scene.input.keyboard.addKey('down');
         this.keyRight = this.scene.input.keyboard.addKey('right');
-
+        
         this.hpValue = new StatusBar(this.scene, this.hp)
         this.keySpace = this.scene.input.keyboard.addKey(32);
         this.keySpace.on('down', (event: KeyboardEvent) => {
             this.anims.play('attack', true);
             this.scene.game.events.emit(EVENTS_NAME.attack, this.damageModificator);
         });
-
-        // PHYSICS
-        this.getBody().setSize(30, 30);
-        this.getBody().setOffset(8, 0);
+        
+       this.setPlayerPhisics()
 
         this.initAnimations();
 
@@ -45,7 +43,7 @@ export class Player extends Actor {
         if (this.keyLeft?.isDown) {
             this.body.velocity.x = -110;
             this.checkFlip();
-            this.getBody().setOffset(48, 15);
+            this.getBody().setOffset(40, 20);
             this.playerMoves()
         }
         if (this.keyDown?.isDown) {
@@ -55,7 +53,7 @@ export class Player extends Actor {
         if (this.keyRight?.isDown) {
             this.body.velocity.x = 110;
             this.checkFlip();
-            this.getBody().setOffset(15, 15);
+            this.getBody().setOffset(20, 20);
             this.playerMoves()
         }
         this.hpValue.setPosition(this.x - 50, this.y - 40);
@@ -95,5 +93,11 @@ export class Player extends Actor {
         if (this.hp <= 0) {
             this.scene.game.events.emit(EVENTS_NAME.gameEnd, GameStatus.LOSE);
         }
+    }
+
+    public setPlayerPhisics() {
+        this.setDepth(0)
+        this.getBody().setSize(20, 20);
+        this.getBody().setOffset(20, 20);
     }
 }
