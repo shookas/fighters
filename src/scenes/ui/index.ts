@@ -8,25 +8,28 @@ export class UIScene extends Scene {
     private gameEndPhrase!: Text;
     private gameEndHandler: (status: GameStatus) => void;
     private nextLevelHandler: (levelFinished: number) => void;
-    private chestLootHandler: () => void;
+    private chestLootHandler: (winScore: number) => void;
     constructor() {
         super('ui-scene');
-        this.chestLootHandler = () => {
+        this.chestLootHandler = (winScore: number) => {
             this.score.changeValue(ScoreOperations.INCREASE, 10);
-            if (this.score.getValue() === gameConfig.winScore) {
-                const finishedLevel = this.game.scene.getScenes().filter(Boolean).find(scene => scene.scene.isActive() && scene.registry.get('level'));
+            if (this.score.getValue() === winScore) {
+                const finishedScene = this.getCurrentLevelScene();
+                const finishedLevel = finishedScene?.registry.get('level') as number
+                const nextLevelScene = this.scene.get(`level-${finishedLevel + 1}-scene`)
                 this.score.changeValue(ScoreOperations.SET_VALUE, 0);
-                if (finishedLevel) {
-                    this.game.events.emit(EVENTS_NAME.nextLevel, finishedLevel?.registry.get('level'));
+                if (nextLevelScene) {
+                    finishedScene!.scene.stop()
+                    nextLevelScene.scene.start()
                 } else {
-                    this.game.events.emit(EVENTS_NAME.gameEnd)
+                    this.game.events.emit(EVENTS_NAME.gameEnd, GameStatus.WIN)
                 }
             }
         }
 
         this.gameEndHandler = (status) => {
             this.cameras.main.setBackgroundColor('rgba(0,0,0,0.6)');
-            this.game.scene.pause('level-1-scene');
+            this.getCurrentLevelScene().scene.stop();
             this.gameEndPhrase = new Text(
                 this,
                 this.game.scale.width / 2,
@@ -50,7 +53,11 @@ export class UIScene extends Scene {
         }
 
         this.nextLevelHandler = (levelFinished) => {
+            console.log('finished level', levelFinished);
+            
             this.scene.get(`level-${levelFinished}-scene`).scene.stop();
+            console.log('next level', this.scene.get(`level-${levelFinished + 1}-scene`));
+            
             this.scene.get(`level-${levelFinished + 1}-scene`).scene.start();
         }
     }
@@ -62,12 +69,16 @@ export class UIScene extends Scene {
     private initListeners(): void {
         this.game.events.on(EVENTS_NAME.chestLoot, this.chestLootHandler, this);
         this.game.events.once(EVENTS_NAME.gameEnd, this.gameEndHandler, this);
-        this.game.events.once(EVENTS_NAME.nextLevel, this.nextLevelHandler, this);
+        this.game.events.on(EVENTS_NAME.nextLevel, this.nextLevelHandler, this);
     }
     
     private clearListeners() {
         this.game.events.off(EVENTS_NAME.chestLoot, this.chestLootHandler);
         this.game.events.off(EVENTS_NAME.gameEnd, this.gameEndHandler);
         this.game.events.off(EVENTS_NAME.nextLevel, this.nextLevelHandler);
+    }
+
+    private getCurrentLevelScene(): Scene {
+        return this.game.scene.getScenes().filter(Boolean).find(scene => scene.scene.isActive() && scene.registry.get('level'))!;
     }
 }

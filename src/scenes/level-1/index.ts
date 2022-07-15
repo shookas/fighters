@@ -57,7 +57,7 @@ export class Level1 extends Scene {
         );
         this.chests.forEach(chest => {
             this.physics.add.overlap(this.player, chest, (obj1, obj2) => {
-                this.game.events.emit(EVENTS_NAME.chestLoot);
+                this.game.events.emit(EVENTS_NAME.chestLoot, chestPoints.length * 10);
                 obj2.destroy();
                 this.cameras.main.flash();
             });

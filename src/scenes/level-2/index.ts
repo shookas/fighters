@@ -16,7 +16,6 @@ export class Level2 extends Scene {
     private enemiesLv1!: Enemy[];
     private enemiesLv2!: Enemy[];
 
-
     constructor() {
         super('level-2-scene');
     }
@@ -27,6 +26,7 @@ export class Level2 extends Scene {
         this.initCamera()
         this.initEnemiesLv1();
         this.initEnemiesLv2();
+        this.registry.set('level', 2)
         this.physics.add.collider(this.player, this.wallsLayer);
     }
 
@@ -75,7 +75,7 @@ export class Level2 extends Scene {
         );
         this.chests.forEach(chest => {
             this.physics.add.overlap(this.player, chest, (obj1, obj2) => {
-                this.game.events.emit(EVENTS_NAME.chestLoot);
+                this.game.events.emit(EVENTS_NAME.chestLoot, chestPoints.length * 10);
                 obj2.destroy();
                 this.cameras.main.flash();
             });
