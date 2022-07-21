@@ -12,7 +12,7 @@ export class Player extends Actor {
     private hpValue: StatusBar;
     private keySpace: Input.Keyboard.Key;
     constructor(scene: Phaser.Scene, x: number, y: number) {
-        super(scene, x, y, 'king');
+        super(scene, x, y, 'characters_spr', 104);
         // KEYS
         this.keyUp = this.scene.input.keyboard.addKey('up');
         this.keyLeft = this.scene.input.keyboard.addKey('left');
@@ -43,7 +43,7 @@ export class Player extends Actor {
         if (this.keyLeft?.isDown) {
             this.body.velocity.x = -110;
             this.checkFlip();
-            this.getBody().setOffset(40, 20);
+            this.getBody().setOffset(16, 16);
             this.playerMoves()
         }
         if (this.keyDown?.isDown) {
@@ -53,7 +53,7 @@ export class Player extends Actor {
         if (this.keyRight?.isDown) {
             this.body.velocity.x = 110;
             this.checkFlip();
-            this.getBody().setOffset(20, 20);
+            this.getBody().setOffset(0, 16);
             this.playerMoves()
         }
         this.hpValue.setPosition(this.x - 50, this.y - 40);
@@ -67,7 +67,7 @@ export class Player extends Actor {
     private initAnimations(): void {
         this.scene.anims.create({
             key: 'run',
-            frames: this.scene.anims.generateFrameNames('a-king', {
+            frames: this.scene.anims.generateFrameNames('a-knight', {
                 prefix: 'run-',
                 end: 7,
             }),
@@ -97,7 +97,6 @@ export class Player extends Actor {
 
     public setPlayerPhisics() {
         this.setDepth(0)
-        this.getBody().setSize(20, 20);
-        this.getBody().setOffset(20, 20);
+        this.getBody().setSize(16, 16);
     }
 }

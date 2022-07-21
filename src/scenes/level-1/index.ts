@@ -3,7 +3,6 @@ import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-po
 import { Player } from '../../classes/player';
 import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
 import { Enemy } from '../../classes/enemy';
-import { env } from 'process';
 export class Level1 extends Scene {
     private player!: Player;
     private map!: Tilemaps.Tilemap;
@@ -17,8 +16,9 @@ export class Level1 extends Scene {
     }
     create(): void {
         this.initMap();
-        this.player = new Player(this, 100, 100);
+        this.player = new Player(this, 410, 850);
         this.initChests()
+        this.initWeapons()
         this.initCamera()
         this.initEnemies();
         this.registry.set('level', 1)
@@ -35,7 +35,6 @@ export class Level1 extends Scene {
         this.groundLayer = this.map.createLayer('Ground', this.tileset, 0, 0);
         this.wallsLayer = this.map.createLayer('Walls', this.tileset, 0, 0);
         this.wallsLayer.setCollisionByProperty({ collides: true });
-
         this.physics.world.setBounds(0, 0, this.wallsLayer.width, this.wallsLayer.height);
         process.env.NODE_ENV === 'dev' && this.showDebugWalls();
     }
@@ -64,6 +63,21 @@ export class Level1 extends Scene {
         });
     }
 
+    private initWeapons(): void {
+        const weaponPoints = gameObjectsToObjectPoints(
+            this.map.filterObjects('Weapon', obj => obj.name === 'WeaponPoint'),
+        );
+        const weapons = weaponPoints.map(weaponPoint =>
+            this.physics.add.sprite(weaponPoint.x, weaponPoint.y, 'tiles_spr', 50).setScale(1.5),
+        );
+        weapons.forEach(weapon => {
+            this.physics.add.overlap(this.player, weapon, (obj1, obj2) => {
+                this.openDoors()
+                obj2.destroy();
+            });
+        });
+    }
+
     private initCamera(): void {
         this.cameras.main.setSize(this.game.scale.width, this.game.scale.height);
         this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
@@ -84,5 +98,15 @@ export class Level1 extends Scene {
         this.physics.add.collider(this.player, this.enemies, (obj1, obj2) => {
             (obj1 as Player).getDamage(1);
         });
+    }
+
+    private openDoors() {
+        const doors = this.wallsLayer.filterTiles((tile: Phaser.Tilemaps.Tile) => tile.properties.doors);
+        doors.forEach(tile => {
+            this.map.replaceByIndex(tile.index, tile.index + 3)
+            tile.resetCollision()
+            tile.collisionCallback = () => { };
+        })
+
     }
 }

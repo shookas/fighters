@@ -1,4 +1,4 @@
-import { GameObjects, Scene, Tilemaps } from 'phaser';
+import { Scene } from 'phaser';
 import { ENEMY_CONFIG } from '../../consts';
 export class LoadingScene extends Scene {
 
@@ -12,10 +12,7 @@ export class LoadingScene extends Scene {
 
     preload(): void {
         this.load.baseURL = 'assets/';
-        // Our king texture
-        this.load.image('king', 'sprites/king.png');
-        // Our king atlas
-        this.load.atlas('a-king', 'spritesheets/a-king.png', 'spritesheets/a-king_atlas.json');
+        this.load.atlas('a-knight', 'tilemaps/tiles/dungeon-16-16.png', 'spritesheets/knight_atlas.json');
         this.load.atlas(ENEMY_CONFIG.lv1.runAnimationKey, 'tilemaps/tiles/dungeon-16-16.png', 'spritesheets/enemy-lv1_atlas.json');
         this.load.atlas(ENEMY_CONFIG.lv2.runAnimationKey, 'tilemaps/tiles/dungeon-16-16.png', 'spritesheets/enemy-lv2_atlas.json');
 
@@ -31,6 +28,10 @@ export class LoadingScene extends Scene {
         this.load.spritesheet('tiles_spr', 'tilemaps/tiles/dungeon-16-16.png', {
             frameWidth: 16,
             frameHeight: 16,
+        });
+        this.load.spritesheet('characters_spr', 'tilemaps/tiles/dungeon-16-16.png', {
+            frameWidth: 16,
+            frameHeight: 32,
         });
     }
 }
