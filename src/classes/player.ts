@@ -2,6 +2,7 @@ import { Input } from 'phaser';
 import { EVENTS_NAME, GameStatus } from '../consts';
 import { Actor } from './actor';
 import { StatusBar } from './statusbar';
+import { Weapon } from './weapon';
 
 export class Player extends Actor {
     private damageModificator = 1;
@@ -10,6 +11,7 @@ export class Player extends Actor {
     private keyDown: Phaser.Input.Keyboard.Key;
     private keyRight: Phaser.Input.Keyboard.Key;
     private hpValue: StatusBar;
+    private weapon?: Weapon;
     private keySpace: Input.Keyboard.Key;
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, 'characters_spr', 104);
@@ -18,15 +20,15 @@ export class Player extends Actor {
         this.keyLeft = this.scene.input.keyboard.addKey('left');
         this.keyDown = this.scene.input.keyboard.addKey('down');
         this.keyRight = this.scene.input.keyboard.addKey('right');
-        
+
         this.hpValue = new StatusBar(this.scene, this.hp)
         this.keySpace = this.scene.input.keyboard.addKey(32);
         this.keySpace.on('down', (event: KeyboardEvent) => {
-            this.anims.play('attack', true);
+            this.hitStright()
             this.scene.game.events.emit(EVENTS_NAME.attack, this.damageModificator);
         });
-        
-       this.setPlayerPhisics()
+
+        this.setPlayerPhisics()
 
         this.initAnimations();
 
@@ -34,34 +36,61 @@ export class Player extends Actor {
             this.keySpace.removeAllListeners();
         });
     }
+
+    private hitStright() {
+        this.scene.tweens.timeline({
+            targets: this.weapon,
+            ease: Phaser.Math.Easing.Cubic.In,
+            duration: 100,
+            tweens: [
+                {
+                    x: this.x + 10,
+                    yoyo: true
+                },
+            ]
+        });
+    }
+
     update(): void {
         this.getBody().setVelocity(0);
         if (this.keyUp?.isDown) {
             this.body.velocity.y = -110;
+            this.weapon?.setPosition(this.x + 10, this.y + 10)
+            this.weapon?.flipY ? this.weapon?.setPosition(this.x - 10, this.y + 10) : this.weapon?.setPosition(this.x + 10, this.y + 10)
             this.playerMoves()
         }
         if (this.keyLeft?.isDown) {
             this.body.velocity.x = -110;
             this.checkFlip();
             this.getBody().setOffset(16, 16);
+            this.weapon?.setPosition(this.x - 10, this.y + 10)
+            this.weapon?.setFlipY(true);
             this.playerMoves()
         }
         if (this.keyDown?.isDown) {
             this.body.velocity.y = 110;
+            this.weapon?.flipY ? this.weapon?.setPosition(this.x - 10, this.y + 10) : this.weapon?.setPosition(this.x + 10, this.y + 10)
             this.playerMoves()
         }
         if (this.keyRight?.isDown) {
             this.body.velocity.x = 110;
             this.checkFlip();
             this.getBody().setOffset(0, 16);
+            this.weapon?.setPosition(this.x + 10, this.y + 10)
+            this.weapon?.setFlipY(false);
             this.playerMoves()
         }
         this.hpValue.setPosition(this.x - 50, this.y - 40);
+
     }
 
     playerMoves() {
         this.scene.game.events.emit(EVENTS_NAME.playerMoves);
         !this.anims.isPlaying && this.anims.play('run', true);
+    }
+
+    equipWeapon() {
+        this.weapon = new Weapon(this.scene, this.x, this.y, 'tiles_spr', 50)
     }
 
     private initAnimations(): void {

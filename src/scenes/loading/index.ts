@@ -12,9 +12,9 @@ export class LoadingScene extends Scene {
 
     preload(): void {
         this.load.baseURL = 'assets/';
-        this.load.atlas('a-knight', 'tilemaps/tiles/dungeon-16-16.png', 'spritesheets/knight_atlas.json');
-        this.load.atlas(ENEMY_CONFIG.lv1.runAnimationKey, 'tilemaps/tiles/dungeon-16-16.png', 'spritesheets/enemy-lv1_atlas.json');
-        this.load.atlas(ENEMY_CONFIG.lv2.runAnimationKey, 'tilemaps/tiles/dungeon-16-16.png', 'spritesheets/enemy-lv2_atlas.json');
+        this.load.atlas('a-knight', 'tilemaps/tiles/dungeon-16-16.png', 'atlases/knight_atlas.json');
+        this.load.atlas(ENEMY_CONFIG.lv1.runAnimationKey, 'tilemaps/tiles/dungeon-16-16.png', 'atlases/enemy-lv1_atlas.json');
+        this.load.atlas(ENEMY_CONFIG.lv2.runAnimationKey, 'tilemaps/tiles/dungeon-16-16.png', 'atlases/enemy-lv2_atlas.json');
 
         // MAP LOADING
         this.load.image({
