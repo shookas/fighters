@@ -1,6 +1,6 @@
 import { EVENTS_NAME } from '../consts';
 import { Actor } from './actor';
-import { Player } from './player';
+import { Player } from '../player/Player';
 
 export interface EnemyConfig {
     startingFrame: number,

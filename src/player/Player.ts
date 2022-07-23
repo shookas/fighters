@@ -1,8 +1,9 @@
 import { Input } from 'phaser';
+import PlayerController, { MOVE_STATES } from './PlayerController';
 import { EVENTS_NAME, GameStatus } from '../consts';
-import { Actor } from './actor';
-import { StatusBar } from './statusbar';
-import { Weapon } from './weapon';
+import { Actor } from '../classes/actor';
+import { StatusBar } from '../classes/statusbar';
+import { Weapon } from '../classes/weapon';
 
 export class Player extends Actor {
     private damageModificator = 1;
@@ -13,8 +14,10 @@ export class Player extends Actor {
     private hpValue: StatusBar;
     private weapon?: Weapon;
     private keySpace: Input.Keyboard.Key;
+    private playerController: PlayerController;
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, 'characters_spr', 104);
+        this.playerController = new PlayerController(this)
         // KEYS
         this.keyUp = this.scene.input.keyboard.addKey('up');
         this.keyLeft = this.scene.input.keyboard.addKey('left');
@@ -52,41 +55,30 @@ export class Player extends Actor {
     }
 
     update(): void {
-        this.getBody().setVelocity(0);
+        this.playerController.setState(MOVE_STATES.idle, true)
         if (this.keyUp?.isDown) {
-            this.body.velocity.y = -110;
+            this.playerController.setState(MOVE_STATES.moveUp)
             this.weapon?.setPosition(this.x + 10, this.y + 10)
             this.weapon?.flipY ? this.weapon?.setPosition(this.x - 10, this.y + 10) : this.weapon?.setPosition(this.x + 10, this.y + 10)
-            this.playerMoves()
         }
         if (this.keyLeft?.isDown) {
-            this.body.velocity.x = -110;
+            this.playerController.setState(MOVE_STATES.moveLeft)
             this.checkFlip();
-            this.getBody().setOffset(16, 16);
             this.weapon?.setPosition(this.x - 10, this.y + 10)
             this.weapon?.setFlipY(true);
-            this.playerMoves()
         }
         if (this.keyDown?.isDown) {
-            this.body.velocity.y = 110;
+            this.playerController.setState(MOVE_STATES.moveDown)
             this.weapon?.flipY ? this.weapon?.setPosition(this.x - 10, this.y + 10) : this.weapon?.setPosition(this.x + 10, this.y + 10)
-            this.playerMoves()
         }
         if (this.keyRight?.isDown) {
-            this.body.velocity.x = 110;
+            this.playerController.setState(MOVE_STATES.moveRight)
             this.checkFlip();
-            this.getBody().setOffset(0, 16);
             this.weapon?.setPosition(this.x + 10, this.y + 10)
             this.weapon?.setFlipY(false);
-            this.playerMoves()
         }
         this.hpValue.setPosition(this.x - 50, this.y - 40);
 
-    }
-
-    playerMoves() {
-        this.scene.game.events.emit(EVENTS_NAME.playerMoves);
-        !this.anims.isPlaying && this.anims.play('run', true);
     }
 
     equipWeapon() {

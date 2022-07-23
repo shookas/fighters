@@ -1,6 +1,6 @@
 import { Scene, Tilemaps } from 'phaser';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
-import { Player } from '../../classes/player';
+import { Player } from '../../player/Player';
 import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
 import { Enemy } from '../../classes/enemy';
 export class Level1 extends Scene {
