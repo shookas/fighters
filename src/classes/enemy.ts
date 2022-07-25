@@ -10,7 +10,7 @@ export interface EnemyConfig {
 export class Enemy extends Actor {
     private target: Player;
     private AGRESSOR_RADIUS = 100;
-    private attackHandler: (damage: number) => void;
+    private attackHandler: (x: number, y: number, damage: number) => void;
     private enemyFolows: () => void;
     constructor(
         scene: Phaser.Scene,
@@ -31,12 +31,9 @@ export class Enemy extends Actor {
         this.getBody().setOffset(0, 0);
         this.initAnimations()
 
-        this.attackHandler = (damage: number) => {
+        this.attackHandler = (x: number, y: number, damage: number) => {
             if (
-                Phaser.Math.Distance.BetweenPoints(
-                    { x: this.x, y: this.y },
-                    { x: this.target.x, y: this.target.y },
-                ) < this.target.width
+                this.getBounds().contains(x, y)
             ) {
                 this.getDamage(damage);
                 if (!this.hp) {

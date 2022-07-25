@@ -73,7 +73,7 @@ export class Level1 extends Scene {
         weapons.forEach(weapon => {
             this.physics.add.overlap(this.player, weapon, (obj1, obj2) => {
                 this.openDoors()
-                this.player.equipWeapon()
+                this.player.equipWeapon(weapon.frame.name)
                 obj2.destroy();
             });
         });

@@ -9,5 +9,6 @@ export default class IdleState extends MoveState {
 
     enter() {
         this.player.setVelocity(0)
+        this.player.body.setOffset(0, 16);
     }
 }

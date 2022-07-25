@@ -27,6 +27,7 @@ export class Level2 extends Scene {
         this.initEnemiesLv2();
         this.registry.set('level', 2)
         this.physics.add.collider(this.player, this.wallsLayer);
+        this.player.equipWeapon(50);
     }
 
     update(): void {
