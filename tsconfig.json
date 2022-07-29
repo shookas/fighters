@@ -1,23 +1,26 @@
 {
-    "compilerOptions": {
-      "sourceMap": true,
-      "strict": true,
-      "noImplicitReturns": true,
-      "noImplicitAny": true,
-      "module": "es6",
-      "moduleResolution": "node",
-      "resolveJsonModule": true,
-      "esModuleInterop": true,
-      "target": "es5",
-      "allowJs": true,
-      "baseUrl": ".",
-    },
-    "include": [
-      "./index.d.ts",
-      "**/*.ts"
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": [
+      "ESNext",
+      "DOM"
     ],
-    "exclude": [
-      "node_modules",
-      "./dist/"
-    ]
-  }
+    "moduleResolution": "Node",
+    "strict": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+  },
+  "include": [
+    "src"
+  ]
+}
