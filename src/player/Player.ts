@@ -1,4 +1,4 @@
-import { Actor } from '../classes/actor';
+import { Actor } from '../actor/Actor';
 import { StatusBar } from '../classes/statusbar';
 import { EVENTS_NAME, GameStatus } from '../consts';
 import { Weapon } from '../weapon/Weapon';
@@ -61,9 +61,10 @@ export class Player extends Actor {
             }),
             frameRate: 8,
         });
+       
     }
 
-    public getDamage(value?: number): void {
+    public getDamage(value: number): void {
         super.getDamage(value);
         if (this.hp <= 50) {
             this.hpValue.update(this.hp, 0xe74c3c);

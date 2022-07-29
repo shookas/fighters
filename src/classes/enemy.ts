@@ -1,5 +1,5 @@
+import { Actor } from '../actor/Actor';
 import { EVENTS_NAME } from '../consts';
-import { Actor } from './actor';
 import { Player } from '../player/Player';
 
 export interface EnemyConfig {
@@ -11,7 +11,6 @@ export class Enemy extends Actor {
     private target: Player;
     private AGRESSOR_RADIUS = 100;
     private attackHandler: (x: number, y: number, damage: number) => void;
-    private enemyFolows: () => void;
     constructor(
         scene: Phaser.Scene,
         x: number,
@@ -45,33 +44,19 @@ export class Enemy extends Actor {
             }
         }
 
-        this.enemyFolows = () => {
-            if (
-                Phaser.Math.Distance.BetweenPoints(
-                    { x: this.x, y: this.y },
-                    { x: this.target.x, y: this.target.y },
-                ) < this.AGRESSOR_RADIUS
-            ) {
-                !this.anims.isPlaying && this.anims.play(this.config.runAnimationKey, true);
-                this.getBody().setVelocityX(this.target.x - this.x);
-                this.getBody().setVelocityY(this.target.y - this.y);
-            } else {
-                this.getBody().setVelocity(0);
-                this.anims.stop();
-            }
-        }
-
         // EVENTS
         this.scene.game.events.on(EVENTS_NAME.attack, this.attackHandler, this);
-        this.scene.game.events.on(EVENTS_NAME.playerMoves, this.enemyFolows, this);
         this.on('destroy', () => {
             this.scene.game.events.removeListener(EVENTS_NAME.attack, this.attackHandler);
-            this.scene.game.events.removeListener(EVENTS_NAME.playerMoves, this.enemyFolows);
         });
     }
 
     public setTarget(target: Player): void {
         this.target = target;
+    }
+
+    public update(): void {
+        this.enemyFolows()
     }
 
     public initAnimations(): void {
@@ -84,5 +69,21 @@ export class Enemy extends Actor {
             frameRate: 8,
             repeat: -1
         });
+    }
+
+    private enemyFolows() {
+        if (
+            Phaser.Math.Distance.BetweenPoints(
+                { x: this.x, y: this.y },
+                { x: this.target.x, y: this.target.y },
+            ) < this.AGRESSOR_RADIUS
+        ) {
+            !this.anims.isPlaying && this.anims.play(this.config.runAnimationKey, true);
+            this.getBody().setVelocityX(this.target.x - this.x);
+            this.getBody().setVelocityY(this.target.y - this.y);
+        } else {
+            this.getBody().setVelocity(0);
+            this.anims.stop();
+        }
     }
 }

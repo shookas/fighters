@@ -1,9 +1,9 @@
 import { Scene, Tilemaps } from 'phaser';
+import { Enemy } from '../../classes/enemy';
+import { ENEMY_CONFIG } from '../../consts';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
 import { Player } from '../../player/Player';
-import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
-import { Enemy } from '../../classes/enemy';
-export class Level1 extends Scene {
+export class Test extends Scene {
     private player!: Player;
     private map!: Tilemaps.Tilemap;
     private tileset!: Tilemaps.Tileset;
@@ -12,7 +12,7 @@ export class Level1 extends Scene {
     private chests!: Phaser.GameObjects.Sprite[];
     private enemies!: Enemy[];
     constructor() {
-        super('level-1-scene');
+        super('test-scene');
     }
     create(): void {
         this.initMap();
@@ -21,32 +21,24 @@ export class Level1 extends Scene {
         this.initWeapons()
         this.initCamera()
         this.initEnemies();
-        this.registry.set('level', 1)
+        this.registry.set('level', 0)
         this.physics.add.collider(this.player, this.wallsLayer);
     }
 
     update(): void {
         this.player.update();
-        
+        this.enemies.forEach(enemy => enemy.update())
     }
 
     private initMap(): void {
-        this.map = this.make.tilemap({ key: 'level1', tileWidth: 16, tileHeight: 16 });
-        this.tileset = this.map.addTilesetImage('level1', 'tiles');
+        this.map = this.make.tilemap({ key: 'test', tileWidth: 16, tileHeight: 16 });
+        this.tileset = this.map.addTilesetImage('test', 'tiles');
         this.groundLayer = this.map.createLayer('Ground', this.tileset, 0, 0);
         this.wallsLayer = this.map.createLayer('Walls', this.tileset, 0, 0);
         this.wallsLayer.setCollisionByProperty({ collides: true });
         this.physics.world.setBounds(0, 0, this.wallsLayer.width, this.wallsLayer.height);
-        process.env.NODE_ENV === 'dev' && this.showDebugWalls();
     }
 
-    private showDebugWalls(): void {
-        const debugGraphics = this.add.graphics().setAlpha(0.7);
-        this.wallsLayer.renderDebug(debugGraphics, {
-            tileColor: null,
-            collidingTileColor: new Phaser.Display.Color(243, 234, 48, 255),
-        });
-    }
 
     private initChests(): void {
         const chestPoints = gameObjectsToObjectPoints(
@@ -57,7 +49,6 @@ export class Level1 extends Scene {
         );
         this.chests.forEach(chest => {
             this.physics.add.overlap(this.player, chest, (obj1, obj2) => {
-                this.game.events.emit(EVENTS_NAME.chestLoot, chestPoints.length * 10);
                 obj2.destroy();
                 this.cameras.main.flash();
             });
@@ -73,7 +64,6 @@ export class Level1 extends Scene {
         );
         weapons.forEach(weapon => {
             this.physics.add.overlap(this.player, weapon, (obj1, obj2) => {
-                this.openDoors()
                 this.player.equipWeapon(weapon.frame.name)
                 obj2.destroy();
             });
@@ -98,17 +88,9 @@ export class Level1 extends Scene {
         this.physics.add.collider(this.enemies, this.wallsLayer);
         this.physics.add.collider(this.enemies, this.enemies);
         this.physics.add.collider(this.player, this.enemies, (obj1, obj2) => {
-            (obj1 as Player).getDamage(1);
+            (obj1 as Player).getDamage(0);
         });
     }
 
-    private openDoors() {
-        const doors = this.wallsLayer.filterTiles((tile: Phaser.Tilemaps.Tile) => tile.properties.doors);
-        doors.forEach(tile => {
-            this.map.replaceByIndex(tile.index, tile.index + 3)
-            tile.resetCollision()
-            tile.collisionCallback = () => { };
-        })
-
-    }
+   
 }

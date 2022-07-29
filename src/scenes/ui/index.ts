@@ -1,8 +1,7 @@
 import { Scene } from 'phaser';
-import { EVENTS_NAME, GameStatus } from '../../consts';
 import { Score, ScoreOperations } from '../../classes/score';
 import { Text } from '../../classes/text';
-import { gameConfig } from '../../index';
+import { EVENTS_NAME, GameStatus } from '../../consts';
 export class UIScene extends Scene {
     private score!: Score;
     private gameEndPhrase!: Text;
@@ -53,11 +52,7 @@ export class UIScene extends Scene {
         }
 
         this.nextLevelHandler = (levelFinished) => {
-            console.log('finished level', levelFinished);
-            
             this.scene.get(`level-${levelFinished}-scene`).scene.stop();
-            console.log('next level', this.scene.get(`level-${levelFinished + 1}-scene`));
-            
             this.scene.get(`level-${levelFinished + 1}-scene`).scene.start();
         }
     }

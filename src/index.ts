@@ -1,5 +1,5 @@
 import { Game, Types } from 'phaser';
-import { Level2, LoadingScene } from './scenes';
+import { Level2, LoadingScene, Test } from './scenes';
 import { Level1 } from './scenes/level-1';
 import { UIScene } from './scenes/ui';
 
@@ -43,7 +43,7 @@ export const gameConfig: GameConfigExtended = {
     audio: {
         disableWebAudio: false,
     },
-    scene: [LoadingScene, Level1, Level2, UIScene],
+    scene: [LoadingScene, Test, Level1, Level2, UIScene],
     winScore: 40,
 };
 

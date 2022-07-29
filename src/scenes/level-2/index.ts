@@ -3,7 +3,7 @@ import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-po
 import { Player } from '../../player/Player';
 import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
 import { Enemy } from '../../classes/enemy';
-import { Actor } from 'src/classes/actor';
+import { Actor } from 'src/actor/Actor';
 export class Level2 extends Scene {
     private player!: Player;
     private map!: Tilemaps.Tilemap;
