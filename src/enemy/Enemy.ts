@@ -1,23 +1,27 @@
 import { Actor } from '../actor/Actor';
 import { EVENTS_NAME } from '../consts';
 import { Player } from '../player/Player';
+import EnemyController, { ENEMY_STATES } from './EnemyController';
 
 export interface EnemyConfig {
     startingFrame: number,
     runAnimationKey: string,
     initialHp: number;
+    power: number;
+    attackDuration: number;
 }
 export class Enemy extends Actor {
-    private target: Player;
+    public target: Player;
     private AGRESSOR_RADIUS = 100;
     private attackHandler: (x: number, y: number, damage: number) => void;
+    public enemyController: EnemyController;
     constructor(
         scene: Phaser.Scene,
         x: number,
         y: number,
         texture: string,
         target: Player,
-        private config: EnemyConfig
+        public config: EnemyConfig
     ) {
         super(scene, x, y, texture, config.startingFrame);
         super.setHPValue(config.initialHp)
@@ -25,9 +29,10 @@ export class Enemy extends Actor {
         // ADD TO SCENE
         scene.add.existing(this);
         scene.physics.add.existing(this);
+        this.enemyController = new EnemyController(this)
         // PHYSICS MODEL
-        this.getBody().setSize(16, 16);
-        this.getBody().setOffset(0, 0);
+        this.setPhisics()
+
         this.initAnimations()
 
         this.attackHandler = (x: number, y: number, damage: number) => {
@@ -51,12 +56,12 @@ export class Enemy extends Actor {
         });
     }
 
-    public setTarget(target: Player): void {
-        this.target = target;
-    }
-
     public update(): void {
         this.enemyFolows()
+    }
+
+    public attacks() {
+        this.enemyController.setState(ENEMY_STATES.attack, true)
     }
 
     public initAnimations(): void {
@@ -71,6 +76,12 @@ export class Enemy extends Actor {
         });
     }
 
+    private setPhisics() {
+        this.setImmovable(false)
+        this.getBody().setSize(16, 16);
+        this.getBody().setOffset(0, 0);
+    }
+
     private enemyFolows() {
         if (
             Phaser.Math.Distance.BetweenPoints(
@@ -78,7 +89,6 @@ export class Enemy extends Actor {
                 { x: this.target.x, y: this.target.y },
             ) < this.AGRESSOR_RADIUS
         ) {
-            !this.anims.isPlaying && this.anims.play(this.config.runAnimationKey, true);
             this.getBody().setVelocityX(this.target.x - this.x);
             this.getBody().setVelocityY(this.target.y - this.y);
         } else {

@@ -1,5 +1,5 @@
 import { Scene, Tilemaps } from 'phaser';
-import { Enemy } from '../../classes/enemy';
+import { Enemy } from '../../enemy/Enemy';
 import { ENEMY_CONFIG } from '../../consts';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
 import { Player } from '../../player/Player';
@@ -83,12 +83,13 @@ export class Test extends Scene {
         this.enemies = enemiesPoints.map((enemyPoint) =>
             new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, ENEMY_CONFIG.lv1)
                 .setName(enemyPoint.id.toString())
-                .setScale(1.5),
+                .setScale(1.5)
         );
         this.physics.add.collider(this.enemies, this.wallsLayer);
         this.physics.add.collider(this.enemies, this.enemies);
-        this.physics.add.collider(this.player, this.enemies, (obj1, obj2) => {
-            (obj1 as Player).getDamage(0);
+        this.physics.add.collider(this.player, this.enemies, (_, obj2) => {
+            (obj2 as Enemy).attacks();
+
         });
     }
 

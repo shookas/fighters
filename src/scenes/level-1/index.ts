@@ -2,7 +2,7 @@ import { Scene, Tilemaps } from 'phaser';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
 import { Player } from '../../player/Player';
 import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
-import { Enemy } from '../../classes/enemy';
+import { Enemy } from '../../enemy/Enemy';
 export class Level1 extends Scene {
     private player!: Player;
     private map!: Tilemaps.Tilemap;
