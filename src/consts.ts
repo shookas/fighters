@@ -17,7 +17,7 @@ export const ENEMY_CONFIG: {[key: string]: EnemyConfig} = {
         startingFrame: 503,
         runAnimationKey: 'a-enemy-lv1',
         initialHp: 1,
-        power: 0,
+        power: 1,
         attackDuration: 300
     },
     lv2: {

@@ -32,6 +32,8 @@ export class Level2 extends Scene {
 
     update(): void {
         this.player.update();
+        this.enemiesLv1.forEach(enemy => enemy.update())
+        this.enemiesLv2.forEach(enemy => enemy.update())
     }
 
     private initMap(): void {
@@ -115,7 +117,7 @@ export class Level2 extends Scene {
         this.physics.add.collider(this.enemiesLv2, this.wallsLayer);
         this.physics.add.collider(this.enemiesLv2, this.enemiesLv2);
         this.physics.add.collider(this.player, this.enemiesLv2, (obj1, obj2) => {
-            (obj1 as Player).getDamage(2);
+            (obj2 as Enemy).attacks();
         });
     }
 

@@ -27,7 +27,7 @@ export class Level1 extends Scene {
 
     update(): void {
         this.player.update();
-        
+        this.enemies.forEach(enemy => enemy.update())
     }
 
     private initMap(): void {
@@ -56,7 +56,7 @@ export class Level1 extends Scene {
             this.physics.add.sprite(chestPoint.x, chestPoint.y, 'tiles_spr', 595).setScale(1.5),
         );
         this.chests.forEach(chest => {
-            this.physics.add.overlap(this.player, chest, (obj1, obj2) => {
+            this.physics.add.overlap(this.player, chest, (_, obj2) => {
                 this.game.events.emit(EVENTS_NAME.chestLoot, chestPoints.length * 10);
                 obj2.destroy();
                 this.cameras.main.flash();
@@ -72,7 +72,7 @@ export class Level1 extends Scene {
             this.physics.add.sprite(weaponPoint.x, weaponPoint.y, 'tiles_spr', 50).setScale(1.5),
         );
         weapons.forEach(weapon => {
-            this.physics.add.overlap(this.player, weapon, (obj1, obj2) => {
+            this.physics.add.overlap(this.player, weapon, (_, obj2) => {
                 this.openDoors()
                 this.player.equipWeapon(weapon.frame.name)
                 obj2.destroy();
@@ -98,7 +98,7 @@ export class Level1 extends Scene {
         this.physics.add.collider(this.enemies, this.wallsLayer);
         this.physics.add.collider(this.enemies, this.enemies);
         this.physics.add.collider(this.player, this.enemies, (obj1, obj2) => {
-            (obj1 as Player).getDamage(1);
+            (obj2 as Enemy).attacks();
         });
     }
 

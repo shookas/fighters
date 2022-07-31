@@ -15,6 +15,7 @@ export class Enemy extends Actor {
     private AGRESSOR_RADIUS = 100;
     private attackHandler: (x: number, y: number, damage: number) => void;
     public enemyController: EnemyController;
+    private touchingPlayer?: boolean;
     constructor(
         scene: Phaser.Scene,
         x: number,
@@ -56,12 +57,19 @@ export class Enemy extends Actor {
         });
     }
 
+    protected preUpdate(): void {
+        this.touchingPlayer = false
+    }
+
     public update(): void {
-        this.enemyFolows()
+        if (this.getBody()) {
+            this.enemyFolows()
+        }
     }
 
     public attacks() {
         this.enemyController.setState(ENEMY_STATES.attack, true)
+        this.touchingPlayer = true;
     }
 
     public initAnimations(): void {
@@ -89,8 +97,10 @@ export class Enemy extends Actor {
                 { x: this.target.x, y: this.target.y },
             ) < this.AGRESSOR_RADIUS
         ) {
-            this.getBody().setVelocityX(this.target.x - this.x);
-            this.getBody().setVelocityY(this.target.y - this.y);
+            if (!this.touchingPlayer) {
+                this.getBody().setVelocityX(this.target.x - this.x);
+                this.getBody().setVelocityY(this.target.y - this.y);
+            }
         } else {
             this.getBody().setVelocity(0);
             this.anims.stop();

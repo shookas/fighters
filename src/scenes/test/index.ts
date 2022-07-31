@@ -89,7 +89,6 @@ export class Test extends Scene {
         this.physics.add.collider(this.enemies, this.enemies);
         this.physics.add.collider(this.player, this.enemies, (_, obj2) => {
             (obj2 as Enemy).attacks();
-
         });
     }
 
