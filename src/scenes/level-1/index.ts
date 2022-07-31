@@ -8,7 +8,6 @@ export class Level1 extends Scene {
     private map!: Tilemaps.Tilemap;
     private tileset!: Tilemaps.Tileset;
     private wallsLayer!: Tilemaps.TilemapLayer;
-    private groundLayer!: Tilemaps.TilemapLayer;
     private chests!: Phaser.GameObjects.Sprite[];
     private enemies!: Enemy[];
     constructor() {
@@ -33,7 +32,7 @@ export class Level1 extends Scene {
     private initMap(): void {
         this.map = this.make.tilemap({ key: 'level1', tileWidth: 16, tileHeight: 16 });
         this.tileset = this.map.addTilesetImage('level1', 'tiles');
-        this.groundLayer = this.map.createLayer('Ground', this.tileset, 0, 0);
+        this.map.createLayer('Ground', this.tileset, 0, 0);
         this.wallsLayer = this.map.createLayer('Walls', this.tileset, 0, 0);
         this.wallsLayer.setCollisionByProperty({ collides: true });
         this.physics.world.setBounds(0, 0, this.wallsLayer.width, this.wallsLayer.height);
@@ -97,7 +96,7 @@ export class Level1 extends Scene {
         );
         this.physics.add.collider(this.enemies, this.wallsLayer);
         this.physics.add.collider(this.enemies, this.enemies);
-        this.physics.add.collider(this.player, this.enemies, (obj1, obj2) => {
+        this.physics.add.collider(this.player, this.enemies, (_, obj2) => {
             (obj2 as Enemy).attacks();
         });
     }

@@ -5,7 +5,6 @@ import { Weapon } from '../weapon/Weapon';
 import PlayerController, { MOVE_STATES } from './PlayerController';
 
 export class Player extends Actor {
-    private damageModificator = 1;
     private keyUp: Phaser.Input.Keyboard.Key;
     private keyLeft: Phaser.Input.Keyboard.Key;
     private keyDown: Phaser.Input.Keyboard.Key;

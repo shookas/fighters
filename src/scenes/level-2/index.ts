@@ -1,16 +1,14 @@
 import { Scene, Tilemaps } from 'phaser';
-import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
-import { Player } from '../../player/Player';
 import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
 import { Enemy } from '../../enemy/Enemy';
-import { Actor } from 'src/actor/Actor';
+import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
+import { Player } from '../../player/Player';
 export class Level2 extends Scene {
     private player!: Player;
     private map!: Tilemaps.Tilemap;
     private tileset!: Tilemaps.Tileset;
     private wallsLayer!: Tilemaps.TilemapLayer;
     private doors!: Tilemaps.Tile[];
-    private groundLayer!: Tilemaps.TilemapLayer;
     private chests!: Phaser.GameObjects.Sprite[];
     private enemiesLv1!: Enemy[];
     private enemiesLv2!: Enemy[];
@@ -39,11 +37,11 @@ export class Level2 extends Scene {
     private initMap(): void {
         this.map = this.make.tilemap({ key: 'level2', tileWidth: 16, tileHeight: 16 });
         this.tileset = this.map.addTilesetImage('level2', 'tiles');
-        this.groundLayer = this.map.createLayer('Ground', this.tileset, 0, 0);
+        this.map.createLayer('Ground', this.tileset, 0, 0);
         this.wallsLayer = this.map.createLayer('Walls', this.tileset, 0, 0);
         this.wallsLayer.setCollisionByProperty({ collides: true });
         this.doors = this.wallsLayer.filterTiles((tile: Phaser.Tilemaps.Tile) => tile.properties.door);
-        this.doors.forEach(door => door.collisionCallback = ((collision: Actor, tile: Phaser.Tilemaps.Tile) => {
+        this.doors.forEach(door => door.collisionCallback = (() => {
             this.openDoors()
         }))
 
@@ -76,7 +74,7 @@ export class Level2 extends Scene {
             this.physics.add.sprite(chestPoint.x, chestPoint.y, 'tiles_spr', 595).setScale(1.5),
         );
         this.chests.forEach(chest => {
-            this.physics.add.overlap(this.player, chest, (obj1, obj2) => {
+            this.physics.add.overlap(this.player, chest, (_, obj2) => {
                 this.game.events.emit(EVENTS_NAME.chestLoot, chestPoints.length * 10);
                 obj2.destroy();
                 this.cameras.main.flash();
@@ -101,7 +99,7 @@ export class Level2 extends Scene {
         );
         this.physics.add.collider(this.enemiesLv1, this.wallsLayer);
         this.physics.add.collider(this.enemiesLv1, this.enemiesLv1);
-        this.physics.add.collider(this.player, this.enemiesLv1, (obj1, obj2) => {
+        this.physics.add.collider(this.player, this.enemiesLv1, (obj1, _) => {
             (obj1 as Player).getDamage(1);
         });
     }
@@ -116,7 +114,7 @@ export class Level2 extends Scene {
         );
         this.physics.add.collider(this.enemiesLv2, this.wallsLayer);
         this.physics.add.collider(this.enemiesLv2, this.enemiesLv2);
-        this.physics.add.collider(this.player, this.enemiesLv2, (obj1, obj2) => {
+        this.physics.add.collider(this.player, this.enemiesLv2, (_, obj2) => {
             (obj2 as Enemy).attacks();
         });
     }
