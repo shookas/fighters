@@ -57,8 +57,10 @@ export class Enemy extends Actor {
         });
     }
 
-    protected preUpdate(): void {
+    protected preUpdate(time: number, delta: number): void {
+        super.preUpdate(time, delta)
         this.touchingPlayer = false
+
     }
 
     public update(): void {
@@ -85,9 +87,8 @@ export class Enemy extends Actor {
     }
 
     private setPhisics() {
-        this.setImmovable(false)
         this.getBody().setSize(16, 16);
-        this.getBody().setOffset(0, 0);
+        this.getBody().setOffset(0, 16);
     }
 
     private enemyFolows() {
@@ -97,6 +98,7 @@ export class Enemy extends Actor {
                 { x: this.target.x, y: this.target.y },
             ) < this.AGRESSOR_RADIUS
         ) {
+            !this.anims.isPlaying && this.play(this.config.runAnimationKey, true);
             if (!this.touchingPlayer) {
                 this.getBody().setVelocityX(this.target.x - this.x);
                 this.getBody().setVelocityY(this.target.y - this.y);

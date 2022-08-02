@@ -6,7 +6,7 @@ export class LoadingScene extends Scene {
         super('loading-scene');
     }
     create(): void {
-        this.scene.start('level-1-scene');
+        this.scene.start('lseg-scene');
         this.scene.start('ui-scene');
     }
 
@@ -16,6 +16,7 @@ export class LoadingScene extends Scene {
         this.load.atlas('a-hit01', 'tilemaps/tiles/hit01.png', 'atlases/hit01_atlas.json');
         this.load.atlas(ENEMY_CONFIG.lv1.runAnimationKey, 'tilemaps/tiles/dungeon-16-16.png', 'atlases/enemy-lv1_atlas.json');
         this.load.atlas(ENEMY_CONFIG.lv2.runAnimationKey, 'tilemaps/tiles/dungeon-16-16.png', 'atlases/enemy-lv2_atlas.json');
+        this.load.atlas(ENEMY_CONFIG.demonLv2.runAnimationKey, 'tilemaps/tiles/dungeon-16-16.png', 'atlases/demon-lv2_atlas.json');
 
         // MAP LOADING
         this.load.image({
@@ -25,13 +26,13 @@ export class LoadingScene extends Scene {
         this.load.tilemapTiledJSON('test', 'tilemaps/json/test/test.json');
         this.load.tilemapTiledJSON('level1', 'tilemaps/json/level-1/dungeon.json');
         this.load.tilemapTiledJSON('level2', 'tilemaps/json/level-2/dungeon2.json');
+        this.load.tilemapTiledJSON('lseg', 'tilemaps/json/lseg/lseg.json');
 
-        // CHEST LOADING
         this.load.spritesheet('tiles_spr', 'tilemaps/tiles/dungeon-16-16.png', {
             frameWidth: 16,
             frameHeight: 16,
         });
-        this.load.spritesheet('characters_spr', 'tilemaps/tiles/dungeon-16-16.png', {
+        this.load.spritesheet('middle_characters_spr', 'tilemaps/tiles/dungeon-16-16.png', {
             frameWidth: 16,
             frameHeight: 32,
         });

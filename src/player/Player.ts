@@ -13,7 +13,7 @@ export class Player extends Actor {
     public weapon?: Weapon;
     private playerController: PlayerController;
     constructor(scene: Phaser.Scene, x: number, y: number) {
-        super(scene, x, y, 'characters_spr', 104);
+        super(scene, x, y, 'middle_characters_spr', 104);
         this.playerController = new PlayerController(this)
         // KEYS
         this.keyUp = this.scene.input.keyboard.addKey('up');

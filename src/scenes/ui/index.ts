@@ -46,7 +46,7 @@ export class UIScene extends Scene {
 
             this.input.on('pointerdown', () => {
                 this.clearListeners()
-                this.scene.get('level-1-scene').scene.restart();
+                this.scene.get('lseg-scene').scene.restart();
                 this.scene.restart();
             });
         }
