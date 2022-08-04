@@ -16,10 +16,10 @@ export class Player extends Actor {
         super(scene, x, y, 'middle_characters_spr', 104);
         this.playerController = new PlayerController(this)
         // KEYS
-        this.keyUp = this.scene.input.keyboard.addKey('up');
-        this.keyLeft = this.scene.input.keyboard.addKey('left');
-        this.keyDown = this.scene.input.keyboard.addKey('down');
-        this.keyRight = this.scene.input.keyboard.addKey('right');
+        this.keyUp = this.scene.input.keyboard.addKey('w');
+        this.keyLeft = this.scene.input.keyboard.addKey('a');
+        this.keyDown = this.scene.input.keyboard.addKey('s');
+        this.keyRight = this.scene.input.keyboard.addKey('d');
 
         this.hpValue = new StatusBar(this.scene, this.hp)
 

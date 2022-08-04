@@ -98,7 +98,7 @@ export class Lseg extends Scene {
         ).map((enemyPoint) =>
             new Enemy(this, enemyPoint.x, enemyPoint.y, 'middle_characters_spr', this.player, ENEMY_CONFIG.lv1)
                 .setName(enemyPoint.id.toString())
-                .setScale(1.5),
+                .setScale(1.2),
         );
 
         const enemiesLv2 = gameObjectsToObjectPoints(
@@ -106,7 +106,7 @@ export class Lseg extends Scene {
         ).map((enemyPoint) =>
             new Enemy(this, enemyPoint.x, enemyPoint.y, 'middle_characters_spr', this.player, ENEMY_CONFIG.lv2)
                 .setName(enemyPoint.id.toString())
-                .setScale(1.5),
+                .setScale(1.2),
         );
         const demonsLv2 = gameObjectsToObjectPoints(
             this.map.filterObjects('Demons-lv2', (obj) => obj.name === 'EnemyPoint'),
