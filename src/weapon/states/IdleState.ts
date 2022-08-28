@@ -1,10 +1,7 @@
-import { Weapon } from "../Weapon";
+import { Weapon } from '../Weapon';
 
 export default class IdleState {
+  constructor(protected weapon: Weapon) {}
 
-    constructor(protected weapon: Weapon) {
-    }
-
-    enter() {
-    }
+  enter() {}
 }

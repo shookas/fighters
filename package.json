@@ -4,6 +4,7 @@
   "description": "Tibia like pixel isomorphic game",
   "scripts": {
     "dev": "vite",
+    "format": "prettier --write .",
     "build": "tsc && vite build"
   },
   "repository": {
