@@ -8,6 +8,7 @@ export class Level1 extends Scene {
   private map!: Tilemaps.Tilemap;
   private tileset!: Tilemaps.Tileset;
   private wallsLayer!: Tilemaps.TilemapLayer;
+  private entranceLayer!: Tilemaps.TilemapLayer;
   private chests!: Phaser.GameObjects.Sprite[];
   private enemies!: Enemy[];
   constructor() {
@@ -20,6 +21,7 @@ export class Level1 extends Scene {
     this.initWeapons();
     this.initCamera();
     this.initEnemies();
+    this.endLevelRule();
     this.registry.set('level', 1);
     this.physics.add.collider(this.player, this.wallsLayer);
   }
@@ -33,6 +35,7 @@ export class Level1 extends Scene {
     this.map = this.make.tilemap({ key: 'level1', tileWidth: 16, tileHeight: 16 });
     this.tileset = this.map.addTilesetImage('level1', 'tiles');
     this.map.createLayer('Ground', this.tileset, 0, 0);
+    this.entranceLayer = this.map.createLayer('Entrance', this.tileset, 0, 0);
     this.wallsLayer = this.map.createLayer('Walls', this.tileset, 0, 0);
     this.wallsLayer.setCollisionByProperty({ collides: true });
     this.physics.world.setBounds(0, 0, this.wallsLayer.width, this.wallsLayer.height);
@@ -47,6 +50,15 @@ export class Level1 extends Scene {
     });
   }
 
+  private endLevelRule() {
+    const entrance = this.entranceLayer.findTile((entrance) => entrance.index >= 0);
+    entrance.setCollision(true);
+    this.physics.add.collider(this.player, this.entranceLayer);
+    entrance.setCollisionCallback(() => {
+      this.game.events.emit(EVENTS_NAME.nextLevel, this);
+    }, this);
+  }
+
   private initChests(): void {
     const chestPoints = gameObjectsToObjectPoints(
       this.map.filterObjects('Chests', (obj) => obj.name === 'ChestPoint'),
@@ -56,7 +68,7 @@ export class Level1 extends Scene {
     );
     this.chests.forEach((chest) => {
       this.physics.add.overlap(this.player, chest, (_, obj2) => {
-        this.game.events.emit(EVENTS_NAME.chestLoot, chestPoints.length * 10);
+        this.game.events.emit(EVENTS_NAME.chestLoot, 10);
         obj2.destroy();
         this.cameras.main.flash();
       });
@@ -90,7 +102,14 @@ export class Level1 extends Scene {
       this.map.filterObjects('Enemies-lv1', (obj) => obj.name === 'EnemyPoint'),
     );
     this.enemies = enemiesPoints.map((enemyPoint) =>
-      new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, ENEMY_CONFIG.lv1)
+      new Enemy(
+        this,
+        enemyPoint.x,
+        enemyPoint.y,
+        'middle_characters_spr',
+        this.player,
+        ENEMY_CONFIG.lv1,
+      )
         .setName(enemyPoint.id.toString())
         .setScale(1.5),
     );

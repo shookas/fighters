@@ -5,7 +5,7 @@ export class LoadingScene extends Scene {
     super('loading-scene');
   }
   create(): void {
-    this.scene.start('test-scene');
+    this.scene.start('level-1-scene');
     this.scene.start('ui-scene');
   }
 

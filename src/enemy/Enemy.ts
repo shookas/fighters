@@ -115,7 +115,6 @@ export class Enemy extends Actor {
         this.getBody().setVelocityY(this.target.y - this.y);
       }
     } else {
-      this.target.setVelocity(0);
       this.getBody().setVelocity(0);
       this.anims.stop();
     }
