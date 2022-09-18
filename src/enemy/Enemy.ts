@@ -9,7 +9,10 @@ export interface EnemyConfig {
   initialHp: number;
   power: number;
   attackDuration: number;
+  size: EnemySize
 }
+export type EnemySize = 'small' | 'medium' | 'large';
+
 export class Enemy extends Actor {
   public target: Player;
   private AGRESSOR_RADIUS = 100;
@@ -54,18 +57,6 @@ export class Enemy extends Actor {
       this.target.setVelocity(0);
       this.scene.game.events.removeListener(EVENTS_NAME.attack, this.attackHandler);
     });
-    this.setInteractive((this.body as any).customBoundsRectangle, function handler(shape, x, y) {
-      const shapeX = shape.width / 100;
-      const shapeY = shape.height / 100;
-      return x > 0 && x <= shapeX && y > 16 && y <= shapeY + 16;
-    });
-    this.on('pointerover', () => {
-      this.setTint(Phaser.Display.Color.GetColor(205, 97, 85));
-    });
-
-    this.on('pointerout', () => {
-      this.clearTint();
-    });
   }
 
   protected preUpdate(time: number, delta: number): void {
@@ -99,7 +90,10 @@ export class Enemy extends Actor {
   private setPhisics() {
     this.height = 16;
     this.getBody().setSize(16, 16);
-    this.getBody().setOffset(0, 16);
+    if (this.config.size === 'medium') {
+      this.getBody().setOffset(0, 16);
+    }
+    
   }
 
   private enemyFolows() {

@@ -12,26 +12,89 @@ export enum GameStatus {
   LOSE,
 }
 
-export const ENEMY_CONFIG: { [key: string]: EnemyConfig } = {
-  lv1: {
-    startingFrame: 247,
-    runAnimationKey: 'a-enemy-lv1',
-    initialHp: 1,
-    power: 1,
-    attackDuration: 500,
+export const texturesSizes = {
+  small: 'tiles_spr',
+  medium: 'middle_characters_spr',
+  large: 'large_characters_spr'
+}
+
+export const ENEMY_CONFIG: { [key: string]: { [key: string]: EnemyConfig } } = {
+  orcs: {
+    1: {
+      startingFrame: 87,
+      runAnimationKey: 'a-enemy-orc-1',
+      initialHp: 1,
+      power: 1,
+      attackDuration: 300,
+      size: 'small',
+    },
+    2: {
+      startingFrame: 183,
+      runAnimationKey: 'a-enemy-orc-2',
+      initialHp: 2,
+      power: 2,
+      attackDuration: 500,
+      size: 'medium',
+    },
+    3: {
+      startingFrame: 215,
+      runAnimationKey: 'a-enemy-orc-3',
+      initialHp: 2,
+      power: 2,
+      attackDuration: 500,
+      size: 'medium',
+    },
+    4: {
+      startingFrame: 247,
+      runAnimationKey: 'a-enemy-orc-4',
+      initialHp: 2,
+      power: 2,
+      attackDuration: 500,
+      size: 'medium',
+    },
+    5: {
+      startingFrame: 183,
+      runAnimationKey: 'a-enemy-orc-5',
+      initialHp: 5,
+      power: 3,
+      attackDuration: 500,
+      size: 'large',
+    },
   },
-  lv2: {
-    startingFrame: 183,
-    runAnimationKey: 'a-enemy-lv2',
-    initialHp: 2,
-    power: 2,
-    attackDuration: 500,
+  zombies: {
+    1: {
+      startingFrame: 55,
+      runAnimationKey: 'a-enemy-zombi-1',
+      initialHp: 1,
+      power: 2,
+      attackDuration: 700,
+      size: 'small',
+    },
+    2: {
+      startingFrame: 151,
+      runAnimationKey: 'a-enemy-zombi-2',
+      initialHp: 4,
+      power: 3,
+      attackDuration: 700,
+      size: 'medium',
+    },
+    3: {
+      startingFrame: 183,
+      runAnimationKey: 'a-enemy-zombi-3',
+      initialHp: 2,
+      power: 2,
+      attackDuration: 500,
+      size: 'large',
+    },
   },
-  demonLv2: {
-    startingFrame: 343,
-    runAnimationKey: 'a-demon-lv2',
-    initialHp: 5,
-    power: 5,
-    attackDuration: 300,
+  demons: {
+    1: {
+      startingFrame: 343,
+      runAnimationKey: 'a-demon-lv2',
+      initialHp: 5,
+      power: 5,
+      attackDuration: 300,
+      size: 'medium',
+    },
   },
 };

@@ -108,7 +108,7 @@ export class Level1 extends Scene {
         enemyPoint.y,
         'middle_characters_spr',
         this.player,
-        ENEMY_CONFIG.lv1,
+        ENEMY_CONFIG.orcs['1'],
       )
         .setName(enemyPoint.id.toString())
         .setScale(1.5),

@@ -1,4 +1,5 @@
 import { Scene, Tilemaps } from 'phaser';
+import { EnemyFactory } from '../../../src/enemy/EnemyFactory';
 import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
 import { Enemy } from '../../enemy/Enemy';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
@@ -10,19 +11,17 @@ export class Level2 extends Scene {
   private wallsLayer!: Tilemaps.TilemapLayer;
   private doors!: Tilemaps.Tile[];
   private chests!: Phaser.GameObjects.Sprite[];
-  private enemiesLv1!: Enemy[];
-  private enemiesLv2!: Enemy[];
+  private enemies!: Enemy[];
 
   constructor() {
     super('level-2-scene');
   }
   create(): void {
     this.initMap();
-    this.player = new Player(this, 100, 100);
+    this.player = new Player(this, 1030, 1355);
     this.initChests();
     this.initCamera();
-    this.initEnemiesLv1();
-    this.initEnemiesLv2();
+    this.initEnemies();
     this.registry.set('level', 2);
     this.physics.add.collider(this.player, this.wallsLayer);
     this.player.equipWeapon(50);
@@ -30,8 +29,7 @@ export class Level2 extends Scene {
 
   update(): void {
     this.player.update();
-    this.enemiesLv1.forEach((enemy) => enemy.update());
-    this.enemiesLv2.forEach((enemy) => enemy.update());
+    this.enemies.forEach((enemy) => enemy.update());
   }
 
   private initMap(): void {
@@ -90,34 +88,35 @@ export class Level2 extends Scene {
     this.cameras.main.setZoom(2);
   }
 
-  private initEnemiesLv1(): void {
-    const enemiesPointsLv1 = gameObjectsToObjectPoints(
-      this.map.filterObjects('Enemies-lv1', (obj) => obj.name === 'EnemyPoint'),
+  private initEnemies(): void {
+    const findEnemyLevel = (enemyPoint: any) => {
+      return (
+        (enemyPoint.properties?.find(
+          (prop: { name: string; value: string | number }) => prop.name === 'level',
+        )?.value as string) || '1'
+      );
+    };
+    const orcsObjects = gameObjectsToObjectPoints(
+      this.map.filterObjects('Enemies-orcs', (obj) => obj.name === 'EnemyPoint'),
     );
-    this.enemiesLv1 = enemiesPointsLv1.map((enemyPoint) =>
-      new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, ENEMY_CONFIG.lv1)
-        .setName(enemyPoint.id.toString())
-        .setScale(1.5),
+    const rootsObjects = gameObjectsToObjectPoints(
+      this.map.filterObjects('Enemies-zombies', (obj) => obj.name === 'EnemyPoint'),
     );
-    this.physics.add.collider(this.enemiesLv1, this.wallsLayer);
-    this.physics.add.collider(this.enemiesLv1, this.enemiesLv1);
-    this.physics.add.collider(this.player, this.enemiesLv1, (obj1, _) => {
-      (obj1 as Player).getDamage(1);
+    const orcsEnemies = orcsObjects.map((enemyPoint) => {
+      const enemyLevel = findEnemyLevel(enemyPoint);
+      let enemyConfig = ENEMY_CONFIG.orcs[enemyLevel];
+      return EnemyFactory.createEnemy(this, enemyPoint, this.player, enemyConfig);
     });
-  }
-  private initEnemiesLv2(): void {
-    const enemiesPointsLv1 = gameObjectsToObjectPoints(
-      this.map.filterObjects('Enemies-lv2', (obj) => obj.name === 'EnemyPoint'),
-    );
-    this.enemiesLv2 = enemiesPointsLv1.map((enemyPoint) =>
-      new Enemy(this, enemyPoint.x, enemyPoint.y, 'tiles_spr', this.player, ENEMY_CONFIG.lv2)
-        .setName(enemyPoint.id.toString())
-        .setScale(1.5),
-    );
-    this.physics.add.collider(this.enemiesLv2, this.wallsLayer);
-    this.physics.add.collider(this.enemiesLv2, this.enemiesLv2);
-    this.physics.add.collider(this.player, this.enemiesLv2, (_, obj2) => {
-      (obj2 as Enemy).attacks();
+    const zombiesEnemies = rootsObjects.map((enemyPoint) => {
+      const enemyLevel = findEnemyLevel(enemyPoint);
+      let enemyConfig = ENEMY_CONFIG.zombies[enemyLevel];
+      return EnemyFactory.createEnemy(this, enemyPoint, this.player, enemyConfig);
+    });
+    this.enemies = [...orcsEnemies, ...zombiesEnemies];
+    this.physics.add.collider(this.enemies, this.wallsLayer);
+    this.physics.add.collider(this.enemies, this.enemies);
+    this.physics.add.collider(this.player, this.enemies, (_, obj) => {
+      (obj as Enemy).attacks();
     });
   }
 }
