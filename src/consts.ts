@@ -53,7 +53,7 @@ export const ENEMY_CONFIG: { [key: string]: { [key: string]: EnemyConfig } } = {
       size: 'medium',
     },
     5: {
-      startingFrame: 183,
+      startingFrame: 90,
       runAnimationKey: 'a-enemy-orc-5',
       initialHp: 5,
       power: 3,
@@ -79,7 +79,7 @@ export const ENEMY_CONFIG: { [key: string]: { [key: string]: EnemyConfig } } = {
       size: 'medium',
     },
     3: {
-      startingFrame: 183,
+      startingFrame: 75,
       runAnimationKey: 'a-enemy-zombi-3',
       initialHp: 2,
       power: 2,
@@ -88,13 +88,21 @@ export const ENEMY_CONFIG: { [key: string]: { [key: string]: EnemyConfig } } = {
     },
   },
   demons: {
-    1: {
+    3: {
       startingFrame: 343,
-      runAnimationKey: 'a-demon-lv2',
+      runAnimationKey: 'a-enemy-demon-3',
       initialHp: 5,
       power: 5,
       attackDuration: 300,
       size: 'medium',
+    },
+    4: {
+      startingFrame: 105,
+      runAnimationKey: 'a-enemy-demon-4',
+      initialHp: 5,
+      power: 5,
+      attackDuration: 300,
+      size: 'large',
     },
   },
 };

@@ -55,9 +55,9 @@ export class LoadingScene extends Scene {
       'atlases/enemy-zombi-3_atlas.json',
     );
     this.load.atlas(
-      ENEMY_CONFIG.demons['1'].runAnimationKey,
+      ENEMY_CONFIG.demons['3'].runAnimationKey,
       'tilemaps/tiles/dungeon-16-16.png',
-      'atlases/demon-lv2_atlas.json',
+      'atlases/enemy-demon-3_atlas.json',
     );
 
     // MAP LOADING
@@ -80,7 +80,8 @@ export class LoadingScene extends Scene {
     });
     this.load.spritesheet(texturesSizes.large, 'tilemaps/tiles/dungeon-16-16.png', {
       frameWidth: 32,
-      frameHeight: 32,
+      frameHeight: 48,
+      margin: 16
     });
     this.load.spritesheet('hit-01_spr', 'tilemaps/tiles/hit01.png', {
       frameWidth: 16,

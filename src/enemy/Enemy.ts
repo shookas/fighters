@@ -9,7 +9,7 @@ export interface EnemyConfig {
   initialHp: number;
   power: number;
   attackDuration: number;
-  size: EnemySize
+  size: EnemySize;
 }
 export type EnemySize = 'small' | 'medium' | 'large';
 
@@ -91,6 +91,9 @@ export class Enemy extends Actor {
     this.height = 16;
     this.getBody().setSize(16, 16);
     if (this.config.size === 'medium') {
+      this.getBody().setOffset(0, 16);
+    } else if(this.config.size === 'large') {
+      this.getBody().setSize(32, 32);
       this.getBody().setOffset(0, 16);
     }
     
