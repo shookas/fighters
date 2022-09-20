@@ -27,6 +27,7 @@ export const ENEMY_CONFIG: { [key: string]: { [key: string]: EnemyConfig } } = {
       power: 1,
       attackDuration: 300,
       size: 'small',
+      speed: 1,
     },
     2: {
       startingFrame: 183,
@@ -35,6 +36,7 @@ export const ENEMY_CONFIG: { [key: string]: { [key: string]: EnemyConfig } } = {
       power: 2,
       attackDuration: 500,
       size: 'medium',
+      speed: 1,
     },
     3: {
       startingFrame: 215,
@@ -43,6 +45,7 @@ export const ENEMY_CONFIG: { [key: string]: { [key: string]: EnemyConfig } } = {
       power: 2,
       attackDuration: 500,
       size: 'medium',
+      speed: 1,
     },
     4: {
       startingFrame: 247,
@@ -51,6 +54,7 @@ export const ENEMY_CONFIG: { [key: string]: { [key: string]: EnemyConfig } } = {
       power: 2,
       attackDuration: 500,
       size: 'medium',
+      speed: 1,
     },
     5: {
       startingFrame: 90,
@@ -59,32 +63,36 @@ export const ENEMY_CONFIG: { [key: string]: { [key: string]: EnemyConfig } } = {
       power: 3,
       attackDuration: 500,
       size: 'large',
+      speed: 1,
     },
   },
   zombies: {
     1: {
       startingFrame: 55,
       runAnimationKey: 'a-enemy-zombi-1',
-      initialHp: 1,
-      power: 2,
+      initialHp: 2,
+      power: 1,
       attackDuration: 700,
       size: 'small',
+      speed: 0.6,
     },
     2: {
       startingFrame: 151,
       runAnimationKey: 'a-enemy-zombi-2',
-      initialHp: 4,
+      initialHp: 3,
       power: 3,
       attackDuration: 700,
       size: 'medium',
+      speed: 0.6,
     },
     3: {
       startingFrame: 75,
       runAnimationKey: 'a-enemy-zombi-3',
-      initialHp: 2,
-      power: 2,
-      attackDuration: 500,
+      initialHp: 5,
+      power: 5,
+      attackDuration: 700,
       size: 'large',
+      speed: 0.6,
     },
   },
   demons: {
@@ -95,6 +103,7 @@ export const ENEMY_CONFIG: { [key: string]: { [key: string]: EnemyConfig } } = {
       power: 5,
       attackDuration: 300,
       size: 'medium',
+      speed: 1,
     },
     4: {
       startingFrame: 105,
@@ -103,6 +112,7 @@ export const ENEMY_CONFIG: { [key: string]: { [key: string]: EnemyConfig } } = {
       power: 5,
       attackDuration: 300,
       size: 'large',
+      speed: 1,
     },
   },
 };

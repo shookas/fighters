@@ -10,6 +10,7 @@ export interface EnemyConfig {
   power: number;
   attackDuration: number;
   size: EnemySize;
+  speed: number;
 }
 export type EnemySize = 'small' | 'medium' | 'large';
 
@@ -92,11 +93,10 @@ export class Enemy extends Actor {
     this.getBody().setSize(16, 16);
     if (this.config.size === 'medium') {
       this.getBody().setOffset(0, 16);
-    } else if(this.config.size === 'large') {
+    } else if (this.config.size === 'large') {
       this.getBody().setSize(32, 32);
       this.getBody().setOffset(0, 16);
     }
-    
   }
 
   private enemyFolows() {
@@ -108,8 +108,8 @@ export class Enemy extends Actor {
     ) {
       !this.anims.isPlaying && this.play(this.config.runAnimationKey, true);
       if (!this.touchingPlayer) {
-        this.getBody().setVelocityX(this.target.x - this.x);
-        this.getBody().setVelocityY(this.target.y - this.y);
+        this.getBody().setVelocityX((this.target.x - this.x) * this.config.speed);
+        this.getBody().setVelocityY((this.target.y - this.y) * this.config.speed);
       }
     } else {
       this.getBody().setVelocity(0);
