@@ -13,8 +13,7 @@ export class Actor extends Physics.Arcade.Sprite {
     this.actorController = new ActorController(this);
   }
   public getDamage(value: number): void {
-    this.actorController.setState(ACTOR_STATES.getDamage);
-
+    this.actorController.setState(ACTOR_STATES.getDamage, false, value);
     if (value) {
       this.hp = this.hp - value;
     }

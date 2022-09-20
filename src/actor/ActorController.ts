@@ -5,9 +5,9 @@ export enum ACTOR_STATES {
   getDamage = 'getDamage',
 }
 export default class ActorController {
-  states: { [key: string]: { enter: () => void } };
+  states: { [key: string]: { enter: (value: number) => void } };
 
-  currentState?: { enter: () => void };
+  currentState?: { enter: (value: number) => void };
 
   constructor(actor: Actor) {
     this.states = {
@@ -15,13 +15,13 @@ export default class ActorController {
     };
   }
 
-  setState(name: ACTOR_STATES, blockingState = false) {
+  setState(name: ACTOR_STATES, blockingState = false, value: number) {
     if (blockingState && this.currentState === this.states[name]) {
       return;
     }
 
     this.currentState = this.states[name];
-    this.currentState.enter();
+    this.currentState.enter(value);
   }
 
   releaseState(state: ACTOR_STATES) {

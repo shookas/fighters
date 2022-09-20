@@ -20,7 +20,9 @@ export default class HitState {
     });
   }
 
-  enter() {
+  enter(value: number) {
+    this.showDamageValue(value);
+
     this.hitSpite.setPosition(this.actor.x, this.actor.y);
     this.hitSpite.setVisible(true);
     this.hitSpite.play('hit', true).setScale(0.5);
@@ -34,5 +36,25 @@ export default class HitState {
         this.actor.setAlpha(1);
       },
     });
+  }
+
+  private showDamageValue(value: number) {
+    const text = new Phaser.GameObjects.Text(
+      this.actor.scene,
+      this.actor.x,
+      this.actor.y,
+      value.toString(),
+      {
+        fontSize: '10px',
+        color: 'red',
+        stroke: '#000',
+        strokeThickness: 4,
+      },
+    );
+    text.setOrigin(0.5, 1);
+    this.actor.scene.add.existing(text);
+    setTimeout(() => {
+      text.destroy();
+    }, 300);
   }
 }
