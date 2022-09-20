@@ -12,13 +12,22 @@ export class Weapon extends Physics.Arcade.Sprite {
   weaponController: WeaponController;
   config: WeaponConfig;
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string, config: WeaponConfig) {
-    const frame = config.frame
+    const frame = config.frame;
     super(scene, x, y, texture, frame);
     this.config = config;
 
     scene.add.existing(this);
     this.angle = 90;
     this.weaponController = new WeaponController(this);
+    this.scene.input.on(
+      'pointerdown',
+      (pointer: Phaser.Input.Pointer) => {
+        if (pointer.leftButtonDown()) {
+          this.weaponController.setState(HIT_STATES.hit, true);
+        }
+      },
+      this,
+    );
   }
 
   update() {
@@ -30,8 +39,5 @@ export class Weapon extends Physics.Arcade.Sprite {
     );
     this.setOrigin(0.5, 1);
     this.setRotation(angle + Math.PI / 2);
-    if (this.scene.input.mousePointer.isDown) {
-      this.weaponController.setState(HIT_STATES.hit, true);
-    }
   }
 }

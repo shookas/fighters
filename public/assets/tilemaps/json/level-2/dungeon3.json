@@ -229,21 +229,8 @@
         {
          "draworder":"topdown",
          "id":4,
-         "locked":true,
          "name":"Chests",
          "objects":[
-                {
-                 "class":"",
-                 "height":0,
-                 "id":1,
-                 "name":"ChestPoint",
-                 "point":true,
-                 "rotation":0,
-                 "visible":true,
-                 "width":0,
-                 "x":902.333333333333,
-                 "y":1028.33333333333
-                }, 
                 {
                  "class":"",
                  "height":0,
@@ -306,22 +293,27 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
         {
          "draworder":"topdown",
          "id":8,
-         "locked":true,
-         "name":"Weapon",
+         "name":"Loot",
          "objects":[
                 {
                  "class":"Shield",
                  "height":0,
                  "id":33,
-                 "name":"WeaponPoint",
+                 "name":"LootPoint",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"shield"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":0,
@@ -771,7 +763,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":39,
+ "nextobjectid":40,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.1",

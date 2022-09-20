@@ -22,6 +22,7 @@ export class Level2 extends Scene {
     this.initChests();
     this.initCamera();
     this.initEnemies();
+    this.initLoot();
     this.registry.set('level', 2);
     this.physics.add.collider(this.player, this.wallsLayer);
     this.player.equipWeapon(WEAPONS.daggers['1']);
@@ -117,6 +118,21 @@ export class Level2 extends Scene {
     this.physics.add.collider(this.enemies, this.enemies);
     this.physics.add.collider(this.player, this.enemies, (_, obj) => {
       (obj as Enemy).attacks();
+    });
+  }
+
+  private initLoot() {
+    const lootPoints = gameObjectsToObjectPoints(
+      this.map.filterObjects('Loot', (obj) => obj.name === 'LootPoint'),
+    );
+    const shield = lootPoints.map((lootPoint) =>
+      this.physics.add.sprite(lootPoint.x, lootPoint.y, 'shield-tile', 1).setScale(1.5),
+    )[0];
+    this.physics.add.overlap(this.player, shield, (player, obj2): void => {
+      console.log('shield equipped');
+      (player as Player).equipShield();
+      obj2.destroy();
+      this.cameras.main.flash();
     });
   }
 }

@@ -70,6 +70,10 @@ export class LoadingScene extends Scene {
     this.load.tilemapTiledJSON('level2', 'tilemaps/json/level-2/dungeon3.json');
     this.load.tilemapTiledJSON('lseg', 'tilemaps/json/lseg/lseg.json');
 
+    this.load.spritesheet('shield-tile', 'tilemaps/tiles/shield.png', {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
     this.load.spritesheet(texturesSizes.small, 'tilemaps/tiles/dungeon-16-16.png', {
       frameWidth: 16,
       frameHeight: 16,

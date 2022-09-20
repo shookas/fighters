@@ -1,3 +1,4 @@
+import { Shield } from '../../src/shield/Shield';
 import { Actor } from '../actor/Actor';
 import { StatusBar } from '../classes/statusbar';
 import { EVENTS_NAME, GameStatus } from '../consts';
@@ -15,6 +16,7 @@ export class Player extends Actor {
   private keyD: Phaser.Input.Keyboard.Key;
   private hpValue: StatusBar;
   public weapon?: Weapon;
+  public shield?: Shield;
   private playerController: PlayerController;
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'middle_characters_spr', 104);
@@ -52,11 +54,16 @@ export class Player extends Actor {
     }
     this.hpValue.setPosition(this.x - 40, this.y - 40);
     this.weapon?.setPosition(this.x, this.y + 8);
+    this.shield?.setPosition(this.x, this.y + 8);
     this.weapon?.update();
   }
 
   equipWeapon(config: WeaponConfig) {
     this.weapon = new Weapon(this.scene, this.x, this.y, 'tiles_spr', config);
+  }
+
+  equipShield() {
+    this.shield = new Shield(this.scene, this.x, this.y, 'shield-tile');
   }
 
   private initAnimations(): void {
