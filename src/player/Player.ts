@@ -9,6 +9,10 @@ export class Player extends Actor {
   private keyLeft: Phaser.Input.Keyboard.Key;
   private keyDown: Phaser.Input.Keyboard.Key;
   private keyRight: Phaser.Input.Keyboard.Key;
+  private keyW: Phaser.Input.Keyboard.Key;
+  private keyA: Phaser.Input.Keyboard.Key;
+  private keyS: Phaser.Input.Keyboard.Key;
+  private keyD: Phaser.Input.Keyboard.Key;
   private hpValue: StatusBar;
   public weapon?: Weapon;
   private playerController: PlayerController;
@@ -20,10 +24,10 @@ export class Player extends Actor {
     this.keyLeft = this.scene.input.keyboard.addKey('left');
     this.keyDown = this.scene.input.keyboard.addKey('down');
     this.keyRight = this.scene.input.keyboard.addKey('right');
-    // this.keyUp = this.scene.input.keyboard.addKey('w');
-    // this.keyLeft = this.scene.input.keyboard.addKey('a');
-    // this.keyDown = this.scene.input.keyboard.addKey('s');
-    // this.keyRight = this.scene.input.keyboard.addKey('d');
+    this.keyW = this.scene.input.keyboard.addKey('w');
+    this.keyA = this.scene.input.keyboard.addKey('a');
+    this.keyS = this.scene.input.keyboard.addKey('s');
+    this.keyD = this.scene.input.keyboard.addKey('d');
 
     this.hpValue = new StatusBar(this.scene, this.hp);
 
@@ -34,19 +38,19 @@ export class Player extends Actor {
 
   update(): void {
     this.playerController.setState(MOVE_STATES.idle, true);
-    if (this.keyUp?.isDown) {
+    if (this.keyUp?.isDown || this.keyW?.isDown) {
       this.playerController.setState(MOVE_STATES.moveUp);
     }
-    if (this.keyLeft?.isDown) {
+    if (this.keyLeft?.isDown || this.keyA?.isDown) {
       this.playerController.setState(MOVE_STATES.moveLeft);
     }
-    if (this.keyDown?.isDown) {
+    if (this.keyDown?.isDown || this.keyS?.isDown) {
       this.playerController.setState(MOVE_STATES.moveDown);
     }
-    if (this.keyRight?.isDown) {
+    if (this.keyRight?.isDown || this.keyD?.isDown) {
       this.playerController.setState(MOVE_STATES.moveRight);
     }
-    this.hpValue.setPosition(this.x - 50, this.y - 40);
+    this.hpValue.setPosition(this.x - 40, this.y - 40);
     this.weapon?.setPosition(this.x, this.y + 8);
     this.weapon?.update();
   }
@@ -68,11 +72,7 @@ export class Player extends Actor {
 
   public getDamage(value: number): void {
     super.getDamage(value);
-    if (this.hp <= 50) {
-      this.hpValue.update(this.hp, 0xe74c3c);
-    } else {
-      this.hpValue.update(this.hp);
-    }
+    this.hpValue.update(this.hp);
     if (this.hp <= 0) {
       this.scene.game.events.emit(EVENTS_NAME.gameEnd, GameStatus.LOSE);
     }
