@@ -1,7 +1,7 @@
 import { Scene, Tilemaps } from 'phaser';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
 import { Player } from '../../player/Player';
-import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
+import { ENEMY_CONFIG, EVENTS_NAME, WEAPONS } from '../../consts';
 import { Enemy } from '../../enemy/Enemy';
 export class Level1 extends Scene {
   private player!: Player;
@@ -85,7 +85,7 @@ export class Level1 extends Scene {
     weapons.forEach((weapon) => {
       this.physics.add.overlap(this.player, weapon, (_, obj2) => {
         this.openDoors();
-        this.player.equipWeapon(weapon.frame.name);
+        this.player.equipWeapon(WEAPONS.daggers['1']);
         obj2.destroy();
       });
     });

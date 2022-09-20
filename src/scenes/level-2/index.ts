@@ -1,6 +1,6 @@
 import { Scene, Tilemaps } from 'phaser';
 import { EnemyFactory } from '../../../src/enemy/EnemyFactory';
-import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
+import { ENEMY_CONFIG, EVENTS_NAME, WEAPONS } from '../../consts';
 import { Enemy } from '../../enemy/Enemy';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
 import { Player } from '../../player/Player';
@@ -24,7 +24,7 @@ export class Level2 extends Scene {
     this.initEnemies();
     this.registry.set('level', 2);
     this.physics.add.collider(this.player, this.wallsLayer);
-    this.player.equipWeapon(50);
+    this.player.equipWeapon(WEAPONS.daggers['1']);
   }
 
   update(): void {

@@ -1,4 +1,5 @@
 import { Physics } from 'phaser';
+import { getRandomInt } from '../../../src/helpers/chaosMonkey';
 import { EVENTS_NAME } from '../../consts';
 import { Weapon } from '../Weapon';
 import { HIT_STATES } from '../WeaponController';
@@ -38,7 +39,7 @@ export default class HitState {
       EVENTS_NAME.attack,
       hitPositionX,
       hitPositionY,
-      this.weapon.config.damage,
+      getRandomInt(this.weapon.config.damage),
     );
     setTimeout(() => {
       this.weapon.weaponController.releaseState(HIT_STATES.hit);

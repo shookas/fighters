@@ -1,5 +1,5 @@
 import { Scene, Tilemaps } from 'phaser';
-import { ENEMY_CONFIG, EVENTS_NAME } from '../../consts';
+import { ENEMY_CONFIG, EVENTS_NAME, WEAPONS } from '../../consts';
 import { Enemy } from '../../enemy/Enemy';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
 import { Player } from '../../player/Player';
@@ -66,7 +66,7 @@ export class Lseg extends Scene {
     weapons.forEach((weapon) => {
       this.physics.add.overlap(this.player, weapon, (_, obj2) => {
         this.openDoors();
-        this.player.equipWeapon(weapon.frame.name);
+        this.player.equipWeapon(WEAPONS.daggers['1']);
         obj2.destroy();
       });
     });
@@ -104,7 +104,7 @@ export class Lseg extends Scene {
         enemyPoint.y,
         'middle_characters_spr',
         this.player,
-        ENEMY_CONFIG.lv1,
+        ENEMY_CONFIG.orcs['1'],
       )
         .setName(enemyPoint.id.toString())
         .setScale(1.2),
@@ -119,7 +119,7 @@ export class Lseg extends Scene {
         enemyPoint.y,
         'middle_characters_spr',
         this.player,
-        ENEMY_CONFIG.lv2,
+        ENEMY_CONFIG.orcs['2'],
       )
         .setName(enemyPoint.id.toString())
         .setScale(1.2),
@@ -133,7 +133,7 @@ export class Lseg extends Scene {
         enemyPoint.y,
         'middle_characters_spr',
         this.player,
-        ENEMY_CONFIG.demonLv2,
+        ENEMY_CONFIG.demons['1'],
       )
         .setName(enemyPoint.id.toString())
         .setScale(1.5),

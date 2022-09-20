@@ -1,7 +1,7 @@
 import { Actor } from '../actor/Actor';
 import { StatusBar } from '../classes/statusbar';
 import { EVENTS_NAME, GameStatus } from '../consts';
-import { Weapon } from '../weapon/Weapon';
+import { Weapon, WeaponConfig } from '../weapon/Weapon';
 import PlayerController, { MOVE_STATES } from './PlayerController';
 
 export class Player extends Actor {
@@ -55,8 +55,8 @@ export class Player extends Actor {
     this.weapon?.update();
   }
 
-  equipWeapon(frame: number | string) {
-    this.weapon = new Weapon(this.scene, this.x, this.y, 'tiles_spr', frame);
+  equipWeapon(config: WeaponConfig) {
+    this.weapon = new Weapon(this.scene, this.x, this.y, 'tiles_spr', config);
   }
 
   private initAnimations(): void {

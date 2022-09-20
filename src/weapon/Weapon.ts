@@ -1,12 +1,21 @@
 import { Physics } from 'phaser';
-import { mapWeapon, WeaponConfig } from './const';
 import WeaponController, { HIT_STATES } from './WeaponController';
+
+export interface WeaponConfig {
+  range: number;
+  duration: number;
+  damage: [number, number];
+  frame: number;
+}
+
 export class Weapon extends Physics.Arcade.Sprite {
   weaponController: WeaponController;
   config: WeaponConfig;
-  constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
+  constructor(scene: Phaser.Scene, x: number, y: number, texture: string, config: WeaponConfig) {
+    const frame = config.frame
     super(scene, x, y, texture, frame);
-    this.config = mapWeapon.get(frame as number)!;
+    this.config = config;
+
     scene.add.existing(this);
     this.angle = 90;
     this.weaponController = new WeaponController(this);

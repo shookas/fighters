@@ -1,6 +1,6 @@
 import { Scene, Tilemaps } from 'phaser';
 import { Enemy } from '../../enemy/Enemy';
-import { ENEMY_CONFIG } from '../../consts';
+import { ENEMY_CONFIG, WEAPONS } from '../../consts';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
 import { Player } from '../../player/Player';
 export class Test extends Scene {
@@ -62,7 +62,7 @@ export class Test extends Scene {
     );
     weapons.forEach((weapon) => {
       this.physics.add.overlap(this.player, weapon, (_, obj2) => {
-        this.player.equipWeapon(weapon.frame.name);
+        this.player.equipWeapon(WEAPONS.daggers['1']);
         obj2.destroy();
       });
     });
@@ -85,7 +85,7 @@ export class Test extends Scene {
         enemyPoint.y,
         'middle_characters_spr',
         this.player,
-        ENEMY_CONFIG.lv1,
+        ENEMY_CONFIG.orcs['1'],
       )
         .setName(enemyPoint.id.toString())
         .setScale(1.5),

@@ -7,7 +7,7 @@ export interface EnemyConfig {
   startingFrame: number;
   runAnimationKey: string;
   initialHp: number;
-  power: number;
+  power: [number, number];
   attackDuration: number;
   size: EnemySize;
   speed: number;
@@ -43,7 +43,7 @@ export class Enemy extends Actor {
     this.attackHandler = (x: number, y: number, damage: number) => {
       if (this.getBounds().contains(x, y)) {
         this.getDamage(damage);
-        if (!this.hp) {
+        if (this.hp <= 0) {
           this.disableBody(true, false);
           this.scene.time.delayedCall(300, () => {
             this.destroy();
