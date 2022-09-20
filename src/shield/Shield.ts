@@ -6,24 +6,5 @@ export class Shield extends Physics.Arcade.Sprite {
 
     scene.add.existing(this);
     this.setVisible(false);
-   
-    this.scene.input.on(
-      'pointerdown',
-      (pointer: Phaser.Input.Pointer) => {
-        if (pointer.rightButtonDown()) {
-          this.setVisible(true);
-        }
-      },
-      this,
-    );
-    this.scene.input.on(
-      'pointerup',
-      (pointer: Phaser.Input.Pointer) => {
-        if (pointer.rightButtonReleased()) {
-          this.setVisible(false);
-        }
-      },
-      this,
-    );
   }
 }

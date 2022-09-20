@@ -4,6 +4,7 @@ export class Actor extends Physics.Arcade.Sprite {
   protected hp = 100;
 
   private actorController: ActorController;
+  damageModificator = 0;
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
     super(scene, x, y, texture, frame);
 
@@ -15,7 +16,7 @@ export class Actor extends Physics.Arcade.Sprite {
   public getDamage(value: number): void {
     this.actorController.setState(ACTOR_STATES.getDamage, false, value);
     if (value) {
-      this.hp = this.hp - value;
+      this.hp = this.hp - (value + this.damageModificator);
     }
   }
   public getHPValue(): number {

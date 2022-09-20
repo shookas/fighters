@@ -7,7 +7,7 @@ export default class MoveDownState extends MoveState {
   }
 
   enter() {
-    this.player.body.velocity.y = this.speed;
+    this.player.body.velocity.y = this.speed + this.player.speedModificator;
     this.playerMoves();
   }
 }

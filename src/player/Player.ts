@@ -17,6 +17,24 @@ export class Player extends Actor {
   private hpValue: StatusBar;
   public weapon?: Weapon;
   public shield?: Shield;
+  public speedModificator = 0;
+
+  private _shieldOn = false;
+  public set shieldOn(isOn: boolean) {
+    if (isOn) {
+      this.speedModificator = this.speedModificator = -50;
+      this.damageModificator = -1;
+    } else {
+      this.speedModificator = 0;
+      this.damageModificator = 0;
+    }
+    this._shieldOn = isOn;
+  }
+
+  public get shieldOn(): boolean {
+    return this._shieldOn;
+  }
+
   private playerController: PlayerController;
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'middle_characters_spr', 104);
@@ -54,7 +72,9 @@ export class Player extends Actor {
     }
     this.hpValue.setPosition(this.x - 40, this.y - 40);
     this.weapon?.setPosition(this.x, this.y + 8);
-    this.shield?.setPosition(this.x, this.y + 8);
+    if (this.shield) {
+      this.shield.setPosition(this.x, this.y + 8);
+    }
     this.weapon?.update();
   }
 
@@ -64,6 +84,28 @@ export class Player extends Actor {
 
   equipShield() {
     this.shield = new Shield(this.scene, this.x, this.y, 'shield-tile');
+    this.scene.input.on(
+      'pointerdown',
+      (pointer: Phaser.Input.Pointer) => {
+        if (pointer.rightButtonDown()) {
+          this.shieldOn = true;
+          this.shield?.setVisible(true);
+          this.weapon!.disabled = true;
+        }
+      },
+      this,
+    );
+    this.scene.input.on(
+      'pointerup',
+      (pointer: Phaser.Input.Pointer) => {
+        if (pointer.button === 2) {
+          this.shieldOn = false;
+          this.shield?.setVisible(false);
+          this.weapon!.disabled = false;
+        }
+      },
+      this,
+    );
   }
 
   private initAnimations(): void {

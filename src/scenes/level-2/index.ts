@@ -122,6 +122,7 @@ export class Level2 extends Scene {
   }
 
   private initLoot() {
+    // this.player.equipShield();
     const lootPoints = gameObjectsToObjectPoints(
       this.map.filterObjects('Loot', (obj) => obj.name === 'LootPoint'),
     );

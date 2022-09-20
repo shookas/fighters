@@ -7,7 +7,7 @@ export default class MoveLeftState extends MoveState {
   }
 
   enter() {
-    this.player.body.velocity.x = -this.speed;
+    this.player.body.velocity.x = -this.speed - this.player.speedModificator;
     this.player.setFlipX(true);
     this.playerMoves();
   }

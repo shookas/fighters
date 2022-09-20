@@ -11,6 +11,17 @@ export interface WeaponConfig {
 export class Weapon extends Physics.Arcade.Sprite {
   weaponController: WeaponController;
   config: WeaponConfig;
+  private _disabled = false;
+
+  public set disabled(isDisabled: boolean) {
+    this.setVisible(!isDisabled)
+    this._disabled = isDisabled;
+  }
+
+  public get disabled(): boolean {
+    return this._disabled;
+  }
+
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string, config: WeaponConfig) {
     const frame = config.frame;
     super(scene, x, y, texture, frame);
@@ -22,7 +33,7 @@ export class Weapon extends Physics.Arcade.Sprite {
     this.scene.input.on(
       'pointerdown',
       (pointer: Phaser.Input.Pointer) => {
-        if (pointer.leftButtonDown()) {
+        if (pointer.leftButtonDown() && !this.disabled) {
           this.weaponController.setState(HIT_STATES.hit, true);
         }
       },
@@ -31,6 +42,9 @@ export class Weapon extends Physics.Arcade.Sprite {
   }
 
   update() {
+    if (this.disabled) {
+      return;
+    }
     let angle = Phaser.Math.Angle.Between(
       this.x,
       this.y,
