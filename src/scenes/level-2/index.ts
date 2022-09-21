@@ -122,7 +122,6 @@ export class Level2 extends Scene {
   }
 
   private initLoot() {
-    // this.player.equipShield();
     const lootPoints = gameObjectsToObjectPoints(
       this.map.filterObjects('Loot', (obj) => obj.name === 'LootPoint'),
     );
@@ -130,7 +129,6 @@ export class Level2 extends Scene {
       this.physics.add.sprite(lootPoint.x, lootPoint.y, 'shield-tile', 1).setScale(1.5),
     )[0];
     this.physics.add.overlap(this.player, shield, (player, obj2): void => {
-      console.log('shield equipped');
       (player as Player).equipShield();
       obj2.destroy();
       this.cameras.main.flash();

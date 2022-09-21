@@ -23,10 +23,10 @@ export class Player extends Actor {
   public set shieldOn(isOn: boolean) {
     if (isOn) {
       this.speedModificator = this.speedModificator = -50;
-      this.damageModificator = -1;
+      this.deflectionProbability = 0.5;
     } else {
       this.speedModificator = 0;
-      this.damageModificator = 0;
+      this.deflectionProbability = 0;
     }
     this._shieldOn = isOn;
   }

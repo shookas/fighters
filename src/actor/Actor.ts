@@ -1,10 +1,14 @@
 import { Physics } from 'phaser';
+import { tossACoin } from '../../src/helpers/chaosMonkey';
 import ActorController, { ACTOR_STATES } from './ActorController';
 export class Actor extends Physics.Arcade.Sprite {
   protected hp = 100;
 
   private actorController: ActorController;
-  damageModificator = 0;
+  /**
+   * Probability to deflect damage 0-1
+   */
+   deflectionProbability = 0; 
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
     super(scene, x, y, texture, frame);
 
@@ -14,9 +18,11 @@ export class Actor extends Physics.Arcade.Sprite {
     this.actorController = new ActorController(this);
   }
   public getDamage(value: number): void {
-    this.actorController.setState(ACTOR_STATES.getDamage, false, value);
-    if (value) {
-      this.hp = this.hp - (value + this.damageModificator);
+    if (!tossACoin(this.deflectionProbability)) {
+      this.actorController.setState(ACTOR_STATES.getDamage, false, value);
+      if (value) {
+        this.hp = this.hp - value;
+      }
     }
   }
   public getHPValue(): number {

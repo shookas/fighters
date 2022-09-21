@@ -21,7 +21,7 @@ export default class HitState {
   }
 
   enter(value: number) {
-    this.showDamageValue(value + this.actor.damageModificator);
+    this.showDamageValue(value);
 
     this.hitSpite.setPosition(this.actor.x, this.actor.y);
     this.hitSpite.setVisible(true);
