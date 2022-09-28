@@ -1,6 +1,7 @@
 import { Scene, Tilemaps } from 'phaser';
+import { Chest } from '../../../src/chest/Chest';
 import { EnemyFactory } from '../../../src/enemy/EnemyFactory';
-import { ENEMY_CONFIG, EVENTS_NAME, WEAPONS } from '../../consts';
+import { CHESTS, ENEMY_CONFIG, WEAPONS } from '../../consts';
 import { Enemy } from '../../enemy/Enemy';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
 import { Player } from '../../player/Player';
@@ -10,7 +11,6 @@ export class Level2 extends Scene {
   private tileset!: Tilemaps.Tileset;
   private wallsLayer!: Tilemaps.TilemapLayer;
   private doors!: Tilemaps.Tile[];
-  private chests!: Phaser.GameObjects.Sprite[];
   private enemies!: Enemy[];
 
   constructor() {
@@ -71,16 +71,7 @@ export class Level2 extends Scene {
     const chestPoints = gameObjectsToObjectPoints(
       this.map.filterObjects('Chests', (obj) => obj.name === 'ChestPoint'),
     );
-    this.chests = chestPoints.map((chestPoint) =>
-      this.physics.add.sprite(chestPoint.x, chestPoint.y, 'tiles_spr', 595).setScale(1.5),
-    );
-    this.chests.forEach((chest) => {
-      this.physics.add.overlap(this.player, chest, (_, obj2) => {
-        this.game.events.emit(EVENTS_NAME.chestLoot, chestPoints.length * 10);
-        obj2.destroy();
-        this.cameras.main.flash();
-      });
-    });
+    chestPoints.forEach((chestPoint) => new Chest(this, chestPoint.x, chestPoint.y, CHESTS.full, this.player));
   }
 
   private initCamera(): void {

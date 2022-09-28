@@ -128,3 +128,9 @@ export const WEAPONS: { [key: string]: { [key: string]: WeaponConfig } } = {
     },
   },
 };
+
+export const CHESTS = {
+  empty: { frame: 595, openAnimationKey: 'a-chest-emtpy' },
+  full: { frame: 627, openAnimationKey: 'a-chest-full' },
+  angry: { frame: 659, openAnimationKey: 'a-chest-angry' },
+};

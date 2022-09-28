@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { ENEMY_CONFIG, texturesSizes } from '../../consts';
+import { CHESTS, ENEMY_CONFIG, texturesSizes } from '../../consts';
 export class LoadingScene extends Scene {
   constructor() {
     super('loading-scene');
@@ -58,6 +58,21 @@ export class LoadingScene extends Scene {
       ENEMY_CONFIG.demons['3'].runAnimationKey,
       'tilemaps/tiles/dungeon-16-16.png',
       'atlases/enemy-demon-3_atlas.json',
+    );
+    this.load.atlas(
+      CHESTS.empty.openAnimationKey,
+      'tilemaps/tiles/dungeon-16-16.png',
+      'atlases/chest-empty_atlas.json',
+    );
+    this.load.atlas(
+      CHESTS.full.openAnimationKey,
+      'tilemaps/tiles/dungeon-16-16.png',
+      'atlases/chest-full_atlas.json',
+    );
+    this.load.atlas(
+      CHESTS.angry.openAnimationKey,
+      'tilemaps/tiles/dungeon-16-16.png',
+      'atlases/chest-angry_atlas.json',
     );
 
     // MAP LOADING
