@@ -2,7 +2,7 @@ import { Scene } from 'phaser';
 import { Score, ScoreOperations } from '../../classes/score';
 import { Text } from '../../classes/text';
 import { EVENTS_NAME, GameStatus } from '../../consts';
-export class UIScene extends Scene {
+export class ProxyScene extends Scene {
   private score!: Score;
   private gameEndPhrase!: Text;
   private gameEndHandler: (status: GameStatus) => void;
