@@ -2,9 +2,11 @@ import { Scene } from 'phaser';
 import { Score, ScoreOperations } from '../../classes/score';
 import { Text } from '../../classes/text';
 import { EVENTS_NAME, GameStatus } from '../../consts';
+import { Dispatcher } from './Dispatcher';
 export class ProxyScene extends Scene {
   private score!: Score;
   private gameEndPhrase!: Text;
+  private dispatcher!: Dispatcher;
   private gameEndHandler: (status: GameStatus) => void;
   private nextLevelHandler: (finishedScene: Scene) => void;
   private lootHandler: (value: number) => void;
@@ -39,17 +41,18 @@ export class ProxyScene extends Scene {
     };
 
     this.nextLevelHandler = (finishedScene: Scene) => {
-        const finishedLevel = finishedScene?.registry.get('level') as number;
-        const nextLevelScene = this.scene.get(`level-${finishedLevel + 1}-scene`);
-        if (nextLevelScene) {
-          finishedScene!.scene.stop();
-          nextLevelScene.scene.start();
-        } else {
-          this.game.events.emit(EVENTS_NAME.gameEnd, GameStatus.WIN);
-        }
+      const finishedLevel = finishedScene?.registry.get('level') as number;
+      const nextLevelScene = this.scene.get(`level-${finishedLevel + 1}-scene`);
+      if (nextLevelScene) {
+        finishedScene!.scene.stop();
+        nextLevelScene.scene.start();
+      } else {
+        this.game.events.emit(EVENTS_NAME.gameEnd, GameStatus.WIN);
+      }
     };
   }
   create(): void {
+    this.dispatcher = new Dispatcher(this.game.canvas);
     this.score = new Score(this, 20, 20, 0);
     this.initListeners();
     this.input.mouse.disableContextMenu();
@@ -59,6 +62,11 @@ export class ProxyScene extends Scene {
     this.game.events.on(EVENTS_NAME.chestLoot, this.lootHandler, this);
     this.game.events.once(EVENTS_NAME.gameEnd, this.gameEndHandler, this);
     this.game.events.on(EVENTS_NAME.nextLevel, this.nextLevelHandler, this);
+    this.game.events.on(
+      EVENTS_NAME.updateHp,
+      (hpValue: number) => this.dispatcher.dispach(EVENTS_NAME.updateHp, hpValue),
+      this,
+    );
   }
 
   private clearListeners() {

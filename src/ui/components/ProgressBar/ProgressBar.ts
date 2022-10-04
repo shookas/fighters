@@ -5,7 +5,7 @@ const namespace = 'ui-progress-bar';
 
 export class ProgressBar extends LitElement {
   @property({ type: Number })
-  value = 0;
+  value!: number;
 
   @property({ type: String })
   variant: 'red' | 'green' | 'blue' = 'red';
@@ -22,7 +22,7 @@ export class ProgressBar extends LitElement {
       <div class="${namespace}">
         <div data-value="0.4" class="ui-progress red">
           <div class="ui-progress__track">
-            <div class="ui-progress__fill ${this.variant}" style="left: 0px; width: ${this.value * 100}%;"></div>
+            <div class="ui-progress__fill ${this.variant}" style="left: 0px; width: ${this.value}%;"></div>
           </div>
           <div class="ui-progress__left-edge"></div>
           <div class="ui-progress__right-edge"></div>

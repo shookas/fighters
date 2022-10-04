@@ -1,6 +1,5 @@
 import { Shield } from '../shield/Shield';
 import { Actor } from '../actor/Actor';
-import { StatusBar } from '../classes/statusbar';
 import { EVENTS_NAME, GameStatus } from '../consts';
 import { Weapon, WeaponConfig } from '../weapon/Weapon';
 import PlayerController, { MOVE_STATES } from './PlayerController';
@@ -14,7 +13,6 @@ export class Player extends Actor {
   private keyA: Phaser.Input.Keyboard.Key;
   private keyS: Phaser.Input.Keyboard.Key;
   private keyD: Phaser.Input.Keyboard.Key;
-  private hpValue: StatusBar;
   public weapon?: Weapon;
   public shield?: Shield;
   public speedModificator = 0;
@@ -49,8 +47,6 @@ export class Player extends Actor {
     this.keyS = this.scene.input.keyboard.addKey('s');
     this.keyD = this.scene.input.keyboard.addKey('d');
 
-    this.hpValue = new StatusBar(this.scene, this.hp);
-
     this.setPlayerPhisics();
 
     this.initAnimations();
@@ -70,7 +66,6 @@ export class Player extends Actor {
     if (this.keyRight?.isDown || this.keyD?.isDown) {
       this.playerController.setState(MOVE_STATES.moveRight);
     }
-    this.hpValue.setPosition(this.x - 40, this.y - 40);
     this.weapon?.setPosition(this.x, this.y + 8);
     if (this.shield) {
       this.shield.setPosition(this.x, this.y + 8);
@@ -121,7 +116,7 @@ export class Player extends Actor {
 
   public getDamage(value: number): void {
     super.getDamage(value);
-    this.hpValue.update(this.hp);
+    this.scene.game.events.emit(EVENTS_NAME.updateHp, this.hp);
     if (this.hp <= 0) {
       this.scene.game.events.emit(EVENTS_NAME.gameEnd, GameStatus.LOSE);
     }

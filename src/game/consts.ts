@@ -6,6 +6,7 @@ export enum EVENTS_NAME {
   nextLevel = 'next-level',
   chestLoot = 'chest-loot',
   attack = 'attack',
+  updateHp = 'updateHp',
 }
 
 export enum GameStatus {

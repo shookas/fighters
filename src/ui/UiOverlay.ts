@@ -1,8 +1,11 @@
 import { html, LitElement } from 'lit-element';
+import { EVENTS_NAME } from '../game/consts';
+import style from './styles.scss';
 
 const namespace = 'ui-overlay';
 
 export class UiOverlay extends LitElement {
+  private hpValue = 100;
   constructor() {
     super();
   }
@@ -14,17 +17,22 @@ export class UiOverlay extends LitElement {
 
   render() {
     return html`
-      <style></style>
+      <style>
+        ${style}
+      </style>
       <div class="ui-overlay">
-        <ui-progress-bar variant=${'red'} value=${0.4}></ui-progress-bar>
+        <div class="hp-bar">
+          <ui-progress-bar variant=${'red'} value=${this.hpValue}></ui-progress-bar>
+        </div>
       </div>
     `;
   }
 
   private observe() {
-    document.addEventListener('', (event) => {
-        
-    })
+    document.addEventListener(EVENTS_NAME.updateHp, (event) => {
+      this.hpValue = (event as CustomEvent).detail;
+      this.requestUpdate();
+    });
   }
 }
 
