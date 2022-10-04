@@ -1,4 +1,4 @@
-import { Shield } from '../../src/shield/Shield';
+import { Shield } from '../shield/Shield';
 import { Actor } from '../actor/Actor';
 import { StatusBar } from '../classes/statusbar';
 import { EVENTS_NAME, GameStatus } from '../consts';

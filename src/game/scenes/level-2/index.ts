@@ -1,6 +1,6 @@
 import { Scene, Tilemaps } from 'phaser';
-import { Chest } from '../../../src/chest/Chest';
-import { EnemyFactory } from '../../../src/enemy/EnemyFactory';
+import { Chest } from '../../chest/Chest';
+import { EnemyFactory } from '../../enemy/EnemyFactory';
 import { CHESTS, ENEMY_CONFIG, WEAPONS } from '../../consts';
 import { Enemy } from '../../enemy/Enemy';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';

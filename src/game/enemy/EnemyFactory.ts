@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
-import { texturesSizes } from '../../src/consts';
-import { Player } from '../../src/player/Player';
+import { texturesSizes } from '../consts';
+import { Player } from '../player/Player';
 import { Enemy, EnemyConfig } from './Enemy';
 
 export class EnemyFactory {

@@ -1,5 +1,5 @@
 import { Physics } from 'phaser';
-import { getRandomInt } from '../../../src/helpers/chaosMonkey';
+import { getRandomInt } from '../../helpers/chaosMonkey';
 import { EVENTS_NAME } from '../../consts';
 import { Weapon } from '../Weapon';
 import { HIT_STATES } from '../WeaponController';

@@ -1,5 +1,5 @@
 import { Physics } from 'phaser';
-import { tossACoin } from '../../src/helpers/chaosMonkey';
+import { tossACoin } from '../helpers/chaosMonkey';
 import ActorController, { ACTOR_STATES } from './ActorController';
 export class Actor extends Physics.Arcade.Sprite {
   protected hp = 100;

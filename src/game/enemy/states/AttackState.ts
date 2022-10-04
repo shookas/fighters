@@ -1,4 +1,4 @@
-import { getRandomInt } from '../../../src/helpers/chaosMonkey';
+import { getRandomInt } from '../../helpers/chaosMonkey';
 import { Enemy } from '../Enemy';
 import { ENEMY_STATES } from '../EnemyController';
 
