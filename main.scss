@@ -1,5 +1,14 @@
+@import url("https://fonts.googleapis.com/css?family=Press+Start+2P");
+
 .ui-overlay {
   position: absolute;
   bottom: 0px;
   width: -webkit-fill-available;
+  padding: 25px;
+}
+
+body {
+  	/* default font */
+	font-family: 'Press Start 2P', cursive;
+  cursor: url("assets/img/cursor/default.png"), auto !important;
 }
