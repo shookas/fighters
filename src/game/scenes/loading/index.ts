@@ -74,6 +74,11 @@ export class LoadingScene extends Scene {
       'tilemaps/tiles/dungeon-16-16.png',
       'atlases/chest-angry_atlas.json',
     );
+    this.load.atlas(
+      'a-gold',
+      'tilemaps/tiles/dungeon-16-16.png',
+      'atlases/gold_atlas.json',
+    );
 
     // MAP LOADING
     this.load.image({
@@ -88,6 +93,10 @@ export class LoadingScene extends Scene {
     this.load.spritesheet('shield-tile', 'tilemaps/tiles/shield.png', {
       frameWidth: 16,
       frameHeight: 16,
+    });
+    this.load.spritesheet(texturesSizes.xsmall, 'tilemaps/tiles/dungeon-16-16.png', {
+      frameWidth: 8,
+      frameHeight: 8,
     });
     this.load.spritesheet(texturesSizes.small, 'tilemaps/tiles/dungeon-16-16.png', {
       frameWidth: 16,

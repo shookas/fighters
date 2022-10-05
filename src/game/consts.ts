@@ -16,6 +16,7 @@ export enum GameStatus {
 }
 
 export const texturesSizes = {
+  xsmall: 'xsmall_tiles_spr',
   small: 'tiles_spr',
   medium: 'middle_characters_spr',
   large: 'large_characters_spr',

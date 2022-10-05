@@ -33,7 +33,7 @@ export class Chest extends Physics.Arcade.Sprite {
       key: 'open',
       frames: this.scene.anims.generateFrameNames(this.config.openAnimationKey, {
         prefix: 'open-',
-        end: 3,
+        end: 2,
       }),
       frameRate: 6,
     });

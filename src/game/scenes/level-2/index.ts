@@ -1,8 +1,9 @@
 import { Scene, Tilemaps } from 'phaser';
 import { Chest } from '../../chest/Chest';
-import { EnemyFactory } from '../../enemy/EnemyFactory';
 import { CHESTS, ENEMY_CONFIG, WEAPONS } from '../../consts';
 import { Enemy } from '../../enemy/Enemy';
+import { EnemyFactory } from '../../enemy/EnemyFactory';
+import { Gold } from '../../gold/Gold';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
 import { Player } from '../../player/Player';
 export class Level2 extends Scene {
@@ -20,6 +21,7 @@ export class Level2 extends Scene {
     this.initMap();
     this.player = new Player(this, 1030, 1355);
     this.initChests();
+    this.initGold();
     this.initCamera();
     this.initEnemies();
     this.initLoot();
@@ -71,7 +73,15 @@ export class Level2 extends Scene {
     const chestPoints = gameObjectsToObjectPoints(
       this.map.filterObjects('Chests', (obj) => obj.name === 'ChestPoint'),
     );
-    chestPoints.forEach((chestPoint) => new Chest(this, chestPoint.x, chestPoint.y, CHESTS.full, this.player));
+    chestPoints.forEach(
+      (chestPoint) => new Chest(this, chestPoint.x, chestPoint.y, CHESTS.full, this.player),
+    );
+  }
+  private initGold(): void {
+    const goldPoints = gameObjectsToObjectPoints(
+      this.map.filterObjects('Gold', (obj) => obj.name === 'GoldPoint'),
+    );
+    goldPoints.forEach((goldPoints) => new Gold(this, goldPoints.x, goldPoints.y, this.player));
   }
 
   private initCamera(): void {
