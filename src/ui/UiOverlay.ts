@@ -22,11 +22,12 @@ export class UiOverlay extends LitElement {
         ${style}
       </style>
       <div class="ui-overlay">
-        <div class="hp-bar">
+        <div class="status-bars">
           <ui-progress-bar variant=${'red'} value=${this.hpValue}></ui-progress-bar>
-        </div>
-        <div class="hp-bar">
           <ui-progress-bar variant=${'green'} value=${this.staminaValue}></ui-progress-bar>
+        </div>
+        <div class="equipment">
+          <ui-container variant="framed">hello</ui-container>
         </div>
       </div>
     `;

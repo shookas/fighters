@@ -1,3 +1,10 @@
-.hp-bar {
-    width: 30%;
+.ui-overlay {
+  display: flex;
+  width: inherit;
+  .status-bars {
+    flex: 1;
+  }
+  .equipment {
+    flex: 2;
+  }
 }
