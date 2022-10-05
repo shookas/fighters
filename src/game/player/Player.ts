@@ -16,15 +16,21 @@ export class Player extends Actor {
   public weapon?: Weapon;
   public shield?: Shield;
   public speedModificator = 0;
+  protected stamina = 100;
+  private looseStaminaToken!: NodeJS.Timer;
+  private gainStaminaToken!: NodeJS.Timer;
 
   private _shieldOn = false;
   public set shieldOn(isOn: boolean) {
+    this.gainStamina();
     if (isOn) {
       this.speedModificator = this.speedModificator = -50;
       this.deflectionProbability = 0.5;
+      this.looseStaminaToken = this.looseStamina();
     } else {
       this.speedModificator = 0;
       this.deflectionProbability = 0;
+      clearTimeout(this.looseStaminaToken!);
     }
     this._shieldOn = isOn;
   }
@@ -83,9 +89,7 @@ export class Player extends Actor {
       'pointerdown',
       (pointer: Phaser.Input.Pointer) => {
         if (pointer.rightButtonDown()) {
-          this.shieldOn = true;
-          this.shield?.setVisible(true);
-          this.weapon!.disabled = true;
+          this.useShield(true);
         }
       },
       this,
@@ -94,9 +98,7 @@ export class Player extends Actor {
       'pointerup',
       (pointer: Phaser.Input.Pointer) => {
         if (pointer.button === 2) {
-          this.shieldOn = false;
-          this.shield?.setVisible(false);
-          this.weapon!.disabled = false;
+          this.useShield(false);
         }
       },
       this,
@@ -116,7 +118,7 @@ export class Player extends Actor {
 
   public getDamage(value: number): void {
     super.getDamage(value);
-    this.scene.game.events.emit(EVENTS_NAME.updateHp, this.hp);
+    this.scene.game.events.emit(EVENTS_NAME.updateHp, this.hp <= 0 ? 0 : this.hp);
     if (this.hp <= 0) {
       this.scene.game.events.emit(EVENTS_NAME.gameEnd, GameStatus.LOSE);
     }
@@ -125,5 +127,36 @@ export class Player extends Actor {
   public setPlayerPhisics() {
     this.setDepth(0);
     this.getBody().setSize(16, 16);
+  }
+
+  private looseStamina(): NodeJS.Timer {
+    clearTimeout(this.gainStaminaToken);
+    this.gainStaminaToken = null as unknown as NodeJS.Timer;
+    return setInterval(() => {
+      this.stamina = this.stamina <= 0 ? 0 : this.stamina - 1;
+      this.scene.game.events.emit(EVENTS_NAME.updateStamina, this.stamina);
+      if (this.stamina <= 0) {
+        this.useShield(false);
+      }
+    }, 100);
+  }
+  private gainStamina() {
+    if (!this.gainStaminaToken) {
+      this.gainStaminaToken = setInterval(() => {
+        if (this.stamina < 100) {
+          this.stamina = this.stamina + 1;
+          this.scene.game.events.emit(EVENTS_NAME.updateStamina, this.stamina);
+        } else {
+          clearTimeout(this.gainStaminaToken);
+          this.gainStaminaToken = null as unknown as NodeJS.Timer;
+        }
+      }, 500);
+    }
+  }
+
+  private useShield(inUse: boolean) {
+    this.shieldOn = inUse;
+    this.shield?.setVisible(inUse);
+    this.weapon!.disabled = inUse;
   }
 }

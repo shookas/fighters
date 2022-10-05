@@ -6,6 +6,7 @@ const namespace = 'ui-overlay';
 
 export class UiOverlay extends LitElement {
   private hpValue = 100;
+  private staminaValue = 100;
   constructor() {
     super();
   }
@@ -24,6 +25,9 @@ export class UiOverlay extends LitElement {
         <div class="hp-bar">
           <ui-progress-bar variant=${'red'} value=${this.hpValue}></ui-progress-bar>
         </div>
+        <div class="hp-bar">
+          <ui-progress-bar variant=${'green'} value=${this.staminaValue}></ui-progress-bar>
+        </div>
       </div>
     `;
   }
@@ -31,6 +35,10 @@ export class UiOverlay extends LitElement {
   private observe() {
     document.addEventListener(EVENTS_NAME.updateHp, (event) => {
       this.hpValue = (event as CustomEvent).detail;
+      this.requestUpdate();
+    });
+    document.addEventListener(EVENTS_NAME.updateStamina, (event) => {
+      this.staminaValue = (event as CustomEvent).detail;
       this.requestUpdate();
     });
   }

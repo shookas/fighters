@@ -67,6 +67,11 @@ export class ProxyScene extends Scene {
       (hpValue: number) => this.dispatcher.dispach(EVENTS_NAME.updateHp, hpValue),
       this,
     );
+    this.game.events.on(
+      EVENTS_NAME.updateStamina,
+      (staminaValue: number) => this.dispatcher.dispach(EVENTS_NAME.updateStamina, staminaValue),
+      this,
+    );
   }
 
   private clearListeners() {
