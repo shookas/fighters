@@ -1,4 +1,5 @@
 import { html, LitElement } from 'lit-element';
+import { PoitionConfig } from 'src/game/poition/Poition';
 import { EVENTS_NAME } from '../game/consts';
 import style from './styles.scss';
 
@@ -8,6 +9,7 @@ export class UiOverlay extends LitElement {
   private hpValue = 100;
   private staminaValue = 100;
   private goldAmount = 0;
+  private poitions: PoitionConfig[] = [];
   constructor() {
     super();
   }
@@ -31,8 +33,7 @@ export class UiOverlay extends LitElement {
           <ui-container variant="framed">
             <ui-icon icon="sword"></ui-icon>
             <ui-icon icon="shield-slot"></ui-icon>
-            <ui-icon icon="potion-slot"></ui-icon>
-            <ui-icon icon="potion-slot"></ui-icon>
+            ${this.renderPoitions()}
           </ui-container>
         </div>
         <div class="toolbar">
@@ -43,6 +44,21 @@ export class UiOverlay extends LitElement {
           </ui-container>
         </div>
       </div>
+    `;
+  }
+
+  private renderPoitions() {
+    const hpPoitions = this.poitions.filter((poition) => poition.type === 'hp');
+    const staminaPoitions = this.poitions.filter((poition) => poition.type === 'stamina');
+    return html`
+      <ui-icon-with-counter
+        icon="${hpPoitions.length ? 'potion-red' : 'potion-slot'}"
+        value="${hpPoitions.length}"
+      ></ui-icon-with-counter>
+      <ui-icon-with-counter
+        icon="${staminaPoitions.length ? 'potion-green' : 'potion-slot'}"
+        value="${staminaPoitions.length}"
+      ></ui-icon-with-counter>
     `;
   }
 
@@ -57,6 +73,10 @@ export class UiOverlay extends LitElement {
     });
     document.addEventListener(EVENTS_NAME.chestLoot, (event) => {
       this.goldAmount = (event as CustomEvent).detail;
+      this.requestUpdate();
+    });
+    document.addEventListener(EVENTS_NAME.getPoition, (event) => {
+      this.poitions.push((event as CustomEvent).detail);
       this.requestUpdate();
     });
   }

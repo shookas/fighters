@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { PoitionConfig } from 'src/game/poition/Poition';
 import { Score, ScoreOperations } from '../../classes/score';
 import { Text } from '../../classes/text';
 import { EVENTS_NAME, GameStatus } from '../../consts';
@@ -72,6 +73,13 @@ export class ProxyScene extends Scene {
       (value: number) => {
         this.score.changeValue(ScoreOperations.INCREASE, value);
         this.dispatcher.dispach(EVENTS_NAME.chestLoot, this.score.getValue());
+      },
+      this,
+    );
+    this.game.events.on(
+      EVENTS_NAME.getPoition,
+      (poition: PoitionConfig) => {
+        this.dispatcher.dispach(EVENTS_NAME.getPoition, poition);
       },
       this,
     );

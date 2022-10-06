@@ -8,6 +8,7 @@ export enum EVENTS_NAME {
   attack = 'attack',
   updateHp = 'updateHp',
   updateStamina = 'updateStamina',
+  getPoition = 'getPoition',
 }
 
 export enum GameStatus {

@@ -4,10 +4,15 @@ export enum ScoreOperations {
   SET_VALUE,
 }
 export class Score {
-  private scoreValue: number;
+  private scoreValue = 0;
+  private static _instance: Score;
   constructor() {
-    this.scoreValue = 0
+    if (Score._instance) {
+      return Score._instance;
+    }
+    Score._instance = this;
   }
+  
   public changeValue(operation: ScoreOperations, value: number): void {
     switch (operation) {
       case ScoreOperations.INCREASE:

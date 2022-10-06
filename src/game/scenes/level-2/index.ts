@@ -1,4 +1,5 @@
 import { Scene, Tilemaps } from 'phaser';
+import { Poition } from '../../poition/Poition';
 import { Chest } from '../../chest/Chest';
 import { CHESTS, ENEMY_CONFIG, WEAPONS } from '../../consts';
 import { Enemy } from '../../enemy/Enemy';
@@ -25,6 +26,7 @@ export class Level2 extends Scene {
     this.initCamera();
     this.initEnemies();
     this.initLoot();
+    this.initPoitions();
     this.registry.set('level', 2);
     this.physics.add.collider(this.player, this.wallsLayer);
     this.player.equipWeapon(WEAPONS.daggers['1']);
@@ -82,6 +84,13 @@ export class Level2 extends Scene {
       this.map.filterObjects('Gold', (obj) => obj.name === 'GoldPoint'),
     );
     goldPoints.forEach((goldPoints) => new Gold(this, goldPoints.x, goldPoints.y, this.player));
+  }
+ 
+  private initPoitions(): void {
+    const goldPoints = gameObjectsToObjectPoints(
+      this.map.filterObjects('Poitions', (obj) => obj.name === 'PoitionPoint'),
+    );
+    goldPoints.forEach((poitionObject) => new Poition(this, poitionObject, this.player));
   }
 
   private initCamera(): void {

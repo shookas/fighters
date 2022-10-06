@@ -1,0 +1,11 @@
+/**
+* Icon styles.
+*/
+
+.ui-icon-with-counter {
+  position: relative;
+  display: inline-block;
+  .counter {
+    position: absolute;
+  }
+}
