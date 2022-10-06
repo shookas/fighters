@@ -9,12 +9,8 @@ export class ProxyScene extends Scene {
   private dispatcher!: Dispatcher;
   private gameEndHandler: (status: GameStatus) => void;
   private nextLevelHandler: (finishedScene: Scene) => void;
-  private lootHandler: (value: number) => void;
   constructor() {
     super('ui-scene');
-    this.lootHandler = (value: number) => {
-      this.score.changeValue(ScoreOperations.INCREASE, value);
-    };
 
     this.gameEndHandler = (status) => {
       this.cameras.main.setBackgroundColor('rgba(0,0,0,0.6)');
@@ -53,13 +49,12 @@ export class ProxyScene extends Scene {
   }
   create(): void {
     this.dispatcher = new Dispatcher(this.game.canvas);
-    this.score = new Score(this, 20, 20, 0);
+    this.score = new Score();
     this.initListeners();
     this.input.mouse.disableContextMenu();
   }
 
   private initListeners(): void {
-    this.game.events.on(EVENTS_NAME.chestLoot, this.lootHandler, this);
     this.game.events.once(EVENTS_NAME.gameEnd, this.gameEndHandler, this);
     this.game.events.on(EVENTS_NAME.nextLevel, this.nextLevelHandler, this);
     this.game.events.on(
@@ -72,10 +67,17 @@ export class ProxyScene extends Scene {
       (staminaValue: number) => this.dispatcher.dispach(EVENTS_NAME.updateStamina, staminaValue),
       this,
     );
+    this.game.events.on(
+      EVENTS_NAME.chestLoot,
+      (value: number) => {
+        this.score.changeValue(ScoreOperations.INCREASE, value);
+        this.dispatcher.dispach(EVENTS_NAME.chestLoot, this.score.getValue());
+      },
+      this,
+    );
   }
 
   private clearListeners() {
-    this.game.events.off(EVENTS_NAME.chestLoot, this.lootHandler);
     this.game.events.off(EVENTS_NAME.gameEnd, this.gameEndHandler);
     this.game.events.off(EVENTS_NAME.nextLevel, this.nextLevelHandler);
   }

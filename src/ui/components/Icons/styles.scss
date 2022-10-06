@@ -1,0 +1,78 @@
+/**
+* Icon styles.
+*/
+
+.ui-icon {
+  display: inline-block;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 64px;
+  height: 64px;
+  &.sword {
+    background-image: url('assets/img/icons/sword.png');
+  }
+
+  &.shield {
+    background-image: url('assets/img/icons/shield.png');
+  }
+
+  &.exclamation {
+    background-image: url('assets/img/icons/exclamation.png');
+  }
+
+  &.gold {
+    background-image: url('assets/img/icons/gold.png');
+  }
+
+  &.hammer {
+    background-image: url('assets/img/icons/hammer.png');
+  }
+
+  &.potion-red {
+    background-image: url('assets/img/icons/potion-red.png');
+  }
+
+  &.potion-green {
+    background-image: url('assets/img/icons/potion-green.png');
+  }
+
+  &.potion-blue {
+    background-image: url('assets/img/icons/potion-blue.png');
+  }
+
+  &.weapon-slot {
+    background-image: url('assets/img/icons/weapon-slot.png');
+  }
+
+  &.shield-slot {
+    background-image: url('assets/img/icons/shield-slot.png');
+  }
+
+  &.armor-slot {
+    background-image: url('assets/img/icons/armor-slot.png');
+  }
+
+  &.helmet-slot {
+    background-image: url('assets/img/icons/helmet-slot.png');
+  }
+
+  &.ring-slot {
+    background-image: url('assets/img/icons/ring-slot.png');
+  }
+
+  &.potion-slot {
+    background-image: url('assets/img/icons/potion-slot.png');
+  }
+
+  &.magic-slot {
+    background-image: url('assets/img/icons/magic-slot.png');
+  }
+
+  &.shoes-slot {
+    background-image: url('assets/assets/img/icons/shoes-slot.png');
+  }
+
+  &.empty-slot {
+    background-image: url('assets/img/icons/empty-slot.png');
+  }
+}

@@ -7,6 +7,7 @@ const namespace = 'ui-overlay';
 export class UiOverlay extends LitElement {
   private hpValue = 100;
   private staminaValue = 100;
+  private goldAmount = 0;
   constructor() {
     super();
   }
@@ -27,7 +28,19 @@ export class UiOverlay extends LitElement {
           <ui-progress-bar variant=${'green'} value=${this.staminaValue}></ui-progress-bar>
         </div>
         <div class="equipment">
-          <ui-container variant="framed">hello</ui-container>
+          <ui-container variant="framed">
+            <ui-icon icon="sword"></ui-icon>
+            <ui-icon icon="shield-slot"></ui-icon>
+            <ui-icon icon="potion-slot"></ui-icon>
+            <ui-icon icon="potion-slot"></ui-icon>
+          </ui-container>
+        </div>
+        <div class="toolbar">
+          <ui-container variant="framed-golden">
+            <ui-icon icon="gold"></ui-icon>
+            ${this.goldAmount}
+            <ui-icon icon="hammer"></ui-icon>
+          </ui-container>
         </div>
       </div>
     `;
@@ -40,6 +53,10 @@ export class UiOverlay extends LitElement {
     });
     document.addEventListener(EVENTS_NAME.updateStamina, (event) => {
       this.staminaValue = (event as CustomEvent).detail;
+      this.requestUpdate();
+    });
+    document.addEventListener(EVENTS_NAME.chestLoot, (event) => {
+      this.goldAmount = (event as CustomEvent).detail;
       this.requestUpdate();
     });
   }
