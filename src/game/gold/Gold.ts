@@ -1,6 +1,6 @@
 import { Physics } from 'phaser';
-import { Player } from '../player/Player';
 import { EVENTS_NAME, texturesSizes } from '../consts';
+import { Player } from '../player/Player';
 
 export class Gold extends Physics.Arcade.Sprite {
   constructor(scene: Phaser.Scene, x: number, y: number, player: Player) {

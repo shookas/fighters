@@ -11,3 +11,11 @@
     flex: 1;
   }
 }
+
+.interactive {
+  cursor: url('assets/img/cursor/point.png'), pointer !important;
+}
+
+.not-clickable {
+  pointer-events: none;
+}

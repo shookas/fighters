@@ -657,7 +657,7 @@
                         {
                          "name":"size",
                          "type":"string",
-                         "value":"small"
+                         "value":"big"
                         }, 
                         {
                          "name":"type",
@@ -680,7 +680,7 @@
                         {
                          "name":"size",
                          "type":"string",
-                         "value":"small"
+                         "value":"big"
                         }, 
                         {
                          "name":"type",
@@ -692,6 +692,29 @@
                  "width":0,
                  "x":1035,
                  "y":399
+                }, 
+                {
+                 "class":"",
+                 "height":0,
+                 "id":98,
+                 "name":"PoitionPoint",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"size",
+                         "type":"string",
+                         "value":"big"
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"hp"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":974.666666666667,
+                 "y":1368.66666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1165,7 +1188,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":98,
+ "nextobjectid":99,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.1",

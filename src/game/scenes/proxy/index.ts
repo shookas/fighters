@@ -1,20 +1,18 @@
 import { Scene } from 'phaser';
-import { store } from '../../classes/store';
-import { gainGold, gainPoition } from '../../classes/store/actions';
-import { Store } from '../../classes/store/createStore';
-import { PoitionConfig } from 'src/game/poition/Poition';
+import { createStore } from '../../../store';
+import { gainGold, gainPoition, updateHp, updateStamina } from '../../../store/actions';
+import { Store } from '../../../store/createStore';
 import { Text } from '../../classes/text';
 import { EVENTS_NAME, GameStatus } from '../../consts';
-import { Dispatcher } from './Dispatcher';
+import { PoitionConfig } from '../../poition/Poition';
 export class ProxyScene extends Scene {
   private store: Store;
   private gameEndPhrase!: Text;
-  private dispatcher!: Dispatcher;
   private gameEndHandler: (status: GameStatus) => void;
   private nextLevelHandler: (finishedScene: Scene) => void;
   constructor() {
     super('ui-scene');
-    this.store = store;
+    this.store = createStore();
 
     this.gameEndHandler = (status) => {
       this.cameras.main.setBackgroundColor('rgba(0,0,0,0.6)');
@@ -52,29 +50,27 @@ export class ProxyScene extends Scene {
     };
   }
   create(): void {
-    this.dispatcher = new Dispatcher(this.game.canvas);
-    this.initListeners();
+    this.gameListeners();
     this.input.mouse.disableContextMenu();
   }
 
-  private initListeners(): void {
+  private gameListeners(): void {
     this.game.events.once(EVENTS_NAME.gameEnd, this.gameEndHandler, this);
     this.game.events.on(EVENTS_NAME.nextLevel, this.nextLevelHandler, this);
     this.game.events.on(
       EVENTS_NAME.updateHp,
-      (hpValue: number) => this.dispatcher.dispach(EVENTS_NAME.updateHp, hpValue),
+      (hpValue: number) => this.store.dispatch(updateHp(hpValue)),
       this,
     );
     this.game.events.on(
       EVENTS_NAME.updateStamina,
-      (staminaValue: number) => this.dispatcher.dispach(EVENTS_NAME.updateStamina, staminaValue),
+      (staminaValue: number) => this.store.dispatch(updateStamina(staminaValue)),
       this,
     );
     this.game.events.on(
       EVENTS_NAME.chestLoot,
       (value: number) => {
         this.store.dispatch(gainGold(value));
-        this.dispatcher.dispach(EVENTS_NAME.chestLoot, this.store.getState().gold);
       },
       this,
     );
@@ -82,8 +78,6 @@ export class ProxyScene extends Scene {
       EVENTS_NAME.getPoition,
       (poition: PoitionConfig) => {
         this.store.dispatch(gainPoition(poition));
-        const { hpPoitions, staminaPoitions } = this.store.getState();
-        this.dispatcher.dispach(EVENTS_NAME.getPoition, { hpPoitions, staminaPoitions });
       },
       this,
     );

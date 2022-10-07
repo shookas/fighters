@@ -1,8 +1,8 @@
 import { PoitionConfig } from 'src/game/poition/Poition';
 
 export enum ActionType {
-  GainHp = 'GainHp',
-  LooseHp = 'LooseHp',
+  UpdateStamina = 'UpdateStamina',
+  UpdateHp = 'UpdateHp',
   GainGold = 'GainGold',
   LooseGold = 'LooseGold',
   GainPoition = 'GainPoition',
@@ -33,4 +33,16 @@ export const looseGold = (value: number): LooseGold => ({
   payload: value,
 });
 
-export type Actions = GainPoition | LoosePoition | GainGold | LooseGold;
+type UpdateStamina = { type: ActionType.UpdateStamina; payload: number };
+export const updateStamina = (value: number): UpdateStamina => ({
+  type: ActionType.UpdateStamina,
+  payload: value,
+});
+
+type UpdateHp = { type: ActionType.UpdateHp; payload: number };
+export const updateHp = (value: number): UpdateHp => ({
+  type: ActionType.UpdateHp,
+  payload: value,
+});
+
+export type Actions = GainPoition | LoosePoition | GainGold | LooseGold | UpdateStamina | UpdateHp;

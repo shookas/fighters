@@ -1,6 +1,8 @@
 import { html, LitElement } from 'lit-element';
-import { PoitionConfig } from 'src/game/poition/Poition';
-import { EVENTS_NAME } from '../game/consts';
+import { PoitionConfig } from '../game/poition/Poition';
+import { createStore } from '../store';
+import { Store } from '../store/createStore';
+import { State } from '../store/reducer';
 import style from './styles.scss';
 
 const namespace = 'ui-overlay';
@@ -13,8 +15,10 @@ export class UiOverlay extends LitElement {
     hpPoitions: [],
     staminaPoitions: [],
   };
+  private store: Store;
   constructor() {
     super();
+    this.store = createStore();
   }
 
   connectedCallback(): void {
@@ -54,31 +58,33 @@ export class UiOverlay extends LitElement {
     const staminaPoitions = this.poitions.staminaPoitions;
     return html`
       <ui-icon-with-counter
+        class="${hpPoitions.length ? 'interactive' : 'not-clickable'}"
+        @click=${this.handlePickHpPoition.bind(this)}
         icon="${hpPoitions.length ? 'potion-red' : 'potion-slot'}"
         value="${hpPoitions.length}"
       ></ui-icon-with-counter>
       <ui-icon-with-counter
+        class="${staminaPoitions.length ? 'interactive' : 'not-clickable'}"
+        @click=${this.handlePickHpPoition}
         icon="${staminaPoitions.length ? 'potion-green' : 'potion-slot'}"
         value="${staminaPoitions.length}"
       ></ui-icon-with-counter>
     `;
   }
 
+  private handlePickHpPoition() {
+    console.log('use poition');
+    
+  }
+
   private observe() {
-    document.addEventListener(EVENTS_NAME.updateHp, (event) => {
-      this.hpValue = (event as CustomEvent<number>).detail;
-      this.requestUpdate();
-    });
-    document.addEventListener(EVENTS_NAME.updateStamina, (event) => {
-      this.staminaValue = (event as CustomEvent<number>).detail;
-      this.requestUpdate();
-    });
-    document.addEventListener(EVENTS_NAME.chestLoot, (event) => {
-      this.goldAmount = (event as CustomEvent<number>).detail;
-      this.requestUpdate();
-    });
-    document.addEventListener(EVENTS_NAME.getPoition, (event) => {
-      this.poitions = (event as CustomEvent).detail;
+    this.store.subscribe((state: State) => {
+      console.log('state changed', state);
+      this.poitions.hpPoitions = state.hpPoitions;
+      this.poitions.staminaPoitions = state.staminaPoitions;
+      this.goldAmount = state.gold;
+      this.hpValue = state.hp;
+      this.staminaValue = state.stamina;
       this.requestUpdate();
     });
   }

@@ -5,11 +5,15 @@ export interface State {
   hpPoitions: PoitionConfig[];
   staminaPoitions: PoitionConfig[];
   gold: number;
+  hp: number;
+  stamina: number;
 }
 const initialState: State = {
   hpPoitions: [],
   staminaPoitions: [],
   gold: 0,
+  hp: 100,
+  stamina: 100,
 };
 
 export const reducer = (state = initialState, action: Actions): State => {
@@ -47,6 +51,16 @@ export const reducer = (state = initialState, action: Actions): State => {
       return {
         ...state,
         gold: state.gold - action.payload,
+      };
+    case 'UpdateHp':
+      return {
+        ...state,
+        hp: action.payload,
+      };
+    case 'UpdateStamina':
+      return {
+        ...state,
+        stamina: action.payload,
       };
     default:
       return state;

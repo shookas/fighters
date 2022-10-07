@@ -1,6 +1,6 @@
 import { Physics } from 'phaser';
-import { Player } from '../player/Player';
 import { CHESTS, EVENTS_NAME } from '../consts';
+import { Player } from '../player/Player';
 
 export class Chest extends Physics.Arcade.Sprite {
   constructor(

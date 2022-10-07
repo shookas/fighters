@@ -1,6 +1,6 @@
-import { Shield } from '../shield/Shield';
 import { Actor } from '../actor/Actor';
 import { EVENTS_NAME, GameStatus } from '../consts';
+import { Shield } from '../shield/Shield';
 import { Weapon, WeaponConfig } from '../weapon/Weapon';
 import PlayerController, { MOVE_STATES } from './PlayerController';
 

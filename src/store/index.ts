@@ -1,4 +1,4 @@
 import { Store } from './createStore';
 import { reducer } from './reducer';
 
-export const store = new Store(reducer);
+export const createStore = () => new Store(reducer);

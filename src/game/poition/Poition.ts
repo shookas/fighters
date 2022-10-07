@@ -1,6 +1,6 @@
 import { Physics } from 'phaser';
-import { Player } from '../player/Player';
 import { EVENTS_NAME, texturesSizes } from '../consts';
+import { Player } from '../player/Player';
 
 enum PoitionSize {
   SMALL = 'small',
