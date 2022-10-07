@@ -9,7 +9,10 @@ export class UiOverlay extends LitElement {
   private hpValue = 100;
   private staminaValue = 100;
   private goldAmount = 0;
-  private poitions: PoitionConfig[] = [];
+  private poitions: { hpPoitions: PoitionConfig[]; staminaPoitions: PoitionConfig[] } = {
+    hpPoitions: [],
+    staminaPoitions: [],
+  };
   constructor() {
     super();
   }
@@ -38,8 +41,7 @@ export class UiOverlay extends LitElement {
         </div>
         <div class="toolbar">
           <ui-container variant="framed-golden">
-            <ui-icon icon="gold"></ui-icon>
-            ${this.goldAmount}
+            <ui-icon-with-counter icon="gold" value="${this.goldAmount}"></ui-icon-with-counter>
             <ui-icon icon="hammer"></ui-icon>
           </ui-container>
         </div>
@@ -48,8 +50,8 @@ export class UiOverlay extends LitElement {
   }
 
   private renderPoitions() {
-    const hpPoitions = this.poitions.filter((poition) => poition.type === 'hp');
-    const staminaPoitions = this.poitions.filter((poition) => poition.type === 'stamina');
+    const hpPoitions = this.poitions.hpPoitions;
+    const staminaPoitions = this.poitions.staminaPoitions;
     return html`
       <ui-icon-with-counter
         icon="${hpPoitions.length ? 'potion-red' : 'potion-slot'}"
@@ -64,19 +66,19 @@ export class UiOverlay extends LitElement {
 
   private observe() {
     document.addEventListener(EVENTS_NAME.updateHp, (event) => {
-      this.hpValue = (event as CustomEvent).detail;
+      this.hpValue = (event as CustomEvent<number>).detail;
       this.requestUpdate();
     });
     document.addEventListener(EVENTS_NAME.updateStamina, (event) => {
-      this.staminaValue = (event as CustomEvent).detail;
+      this.staminaValue = (event as CustomEvent<number>).detail;
       this.requestUpdate();
     });
     document.addEventListener(EVENTS_NAME.chestLoot, (event) => {
-      this.goldAmount = (event as CustomEvent).detail;
+      this.goldAmount = (event as CustomEvent<number>).detail;
       this.requestUpdate();
     });
     document.addEventListener(EVENTS_NAME.getPoition, (event) => {
-      this.poitions.push((event as CustomEvent).detail);
+      this.poitions = (event as CustomEvent).detail;
       this.requestUpdate();
     });
   }

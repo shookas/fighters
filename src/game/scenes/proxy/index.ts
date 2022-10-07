@@ -1,17 +1,20 @@
 import { Scene } from 'phaser';
+import { store } from '../../classes/store';
+import { gainGold, gainPoition } from '../../classes/store/actions';
+import { Store } from '../../classes/store/createStore';
 import { PoitionConfig } from 'src/game/poition/Poition';
-import { Score, ScoreOperations } from '../../classes/score';
 import { Text } from '../../classes/text';
 import { EVENTS_NAME, GameStatus } from '../../consts';
 import { Dispatcher } from './Dispatcher';
 export class ProxyScene extends Scene {
-  private score!: Score;
+  private store: Store;
   private gameEndPhrase!: Text;
   private dispatcher!: Dispatcher;
   private gameEndHandler: (status: GameStatus) => void;
   private nextLevelHandler: (finishedScene: Scene) => void;
   constructor() {
     super('ui-scene');
+    this.store = store;
 
     this.gameEndHandler = (status) => {
       this.cameras.main.setBackgroundColor('rgba(0,0,0,0.6)');
@@ -50,7 +53,6 @@ export class ProxyScene extends Scene {
   }
   create(): void {
     this.dispatcher = new Dispatcher(this.game.canvas);
-    this.score = new Score();
     this.initListeners();
     this.input.mouse.disableContextMenu();
   }
@@ -71,15 +73,17 @@ export class ProxyScene extends Scene {
     this.game.events.on(
       EVENTS_NAME.chestLoot,
       (value: number) => {
-        this.score.changeValue(ScoreOperations.INCREASE, value);
-        this.dispatcher.dispach(EVENTS_NAME.chestLoot, this.score.getValue());
+        this.store.dispatch(gainGold(value));
+        this.dispatcher.dispach(EVENTS_NAME.chestLoot, this.store.getState().gold);
       },
       this,
     );
     this.game.events.on(
       EVENTS_NAME.getPoition,
       (poition: PoitionConfig) => {
-        this.dispatcher.dispach(EVENTS_NAME.getPoition, poition);
+        this.store.dispatch(gainPoition(poition));
+        const { hpPoitions, staminaPoitions } = this.store.getState();
+        this.dispatcher.dispach(EVENTS_NAME.getPoition, { hpPoitions, staminaPoitions });
       },
       this,
     );
