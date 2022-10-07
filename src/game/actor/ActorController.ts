@@ -1,8 +1,10 @@
 import { Actor } from './Actor';
 import GetDamage from './states/GetDamageState';
+import HealState from './states/HealState';
 
 export enum ACTOR_STATES {
   getDamage = 'getDamage',
+  heal = 'heal',
 }
 export default class ActorController {
   states: { [key: string]: { enter: (value: number) => void } };
@@ -12,6 +14,7 @@ export default class ActorController {
   constructor(actor: Actor) {
     this.states = {
       getDamage: new GetDamage(actor),
+      heal: new HealState(actor),
     };
   }
 

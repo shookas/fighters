@@ -32,14 +32,18 @@ export const reducer = (state = initialState, action: Actions): State => {
       }
     case 'LoosePoition':
       if (action.payload.type === 'hp') {
+        const newArray = [...state.hpPoitions];
+        newArray.shift();
         return {
           ...state,
-          hpPoitions: [...state.hpPoitions.slice(0, 1)],
+          hpPoitions: newArray,
         };
       } else {
+        const newArray = [...state.staminaPoitions];
+        newArray.shift();
         return {
           ...state,
-          staminaPoitions: [...state.staminaPoitions.slice(0, 1)],
+          staminaPoitions: newArray,
         };
       }
     case 'GainGold':

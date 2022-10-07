@@ -5,7 +5,7 @@ import MoveLeftState from './states/MoveLeftState';
 import MoveRightState from './states/MoveRightState';
 import MoveUpState from './states/MoveUpState';
 
-export enum MOVE_STATES {
+export enum PLAYER_STATES {
   moveLeft = 'moveLeft',
   moveRight = 'moveRight',
   moveDown = 'moveDown',
@@ -27,7 +27,7 @@ export default class PlayerController {
     };
   }
 
-  setState(name: MOVE_STATES, blockingState = false) {
+  setState(name: PLAYER_STATES, blockingState = false) {
     if (blockingState && this.currentState === this.states[name]) {
       return;
     }

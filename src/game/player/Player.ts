@@ -1,8 +1,11 @@
+import { createStore } from '../../store';
+import { Store } from '../../store/createStore';
+import { State } from '../../store/reducer';
 import { Actor } from '../actor/Actor';
 import { EVENTS_NAME, GameStatus } from '../consts';
 import { Shield } from '../shield/Shield';
 import { Weapon, WeaponConfig } from '../weapon/Weapon';
-import PlayerController, { MOVE_STATES } from './PlayerController';
+import PlayerController, { PLAYER_STATES } from './PlayerController';
 
 export class Player extends Actor {
   private keyUp: Phaser.Input.Keyboard.Key;
@@ -19,6 +22,7 @@ export class Player extends Actor {
   protected stamina = 100;
   private looseStaminaToken!: NodeJS.Timer;
   private gainStaminaToken!: NodeJS.Timer;
+  private store: Store;
 
   private _shieldOn = false;
   public set shieldOn(isOn: boolean) {
@@ -42,6 +46,7 @@ export class Player extends Actor {
   private playerController: PlayerController;
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'middle_characters_spr', 104);
+    this.store = createStore();
     this.playerController = new PlayerController(this);
     // KEYS
     this.keyUp = this.scene.input.keyboard.addKey('up');
@@ -56,21 +61,22 @@ export class Player extends Actor {
     this.setPlayerPhisics();
 
     this.initAnimations();
+    this.observe();
   }
 
   update(): void {
-    this.playerController.setState(MOVE_STATES.idle, true);
+    this.playerController.setState(PLAYER_STATES.idle, true);
     if (this.keyUp?.isDown || this.keyW?.isDown) {
-      this.playerController.setState(MOVE_STATES.moveUp);
+      this.playerController.setState(PLAYER_STATES.moveUp);
     }
     if (this.keyLeft?.isDown || this.keyA?.isDown) {
-      this.playerController.setState(MOVE_STATES.moveLeft);
+      this.playerController.setState(PLAYER_STATES.moveLeft);
     }
     if (this.keyDown?.isDown || this.keyS?.isDown) {
-      this.playerController.setState(MOVE_STATES.moveDown);
+      this.playerController.setState(PLAYER_STATES.moveDown);
     }
     if (this.keyRight?.isDown || this.keyD?.isDown) {
-      this.playerController.setState(MOVE_STATES.moveRight);
+      this.playerController.setState(PLAYER_STATES.moveRight);
     }
     this.weapon?.setPosition(this.x, this.y + 8);
     if (this.shield) {
@@ -124,6 +130,12 @@ export class Player extends Actor {
     }
   }
 
+  public heal(value: number) {
+    const valueToAdd = this.hp + value >= 100 ? 100 - this.hp : value;
+    super.heal(valueToAdd);
+    this.scene.game.events.emit(EVENTS_NAME.updateHp, this.hp);
+  }
+
   public setPlayerPhisics() {
     this.setDepth(0);
     this.getBody().setSize(16, 16);
@@ -158,5 +170,13 @@ export class Player extends Actor {
     this.shieldOn = inUse;
     this.shield?.setVisible(inUse);
     this.weapon!.disabled = inUse;
+  }
+
+  private observe() {
+    this.store.subscribe((state: State, oldState: State) => {
+      if (state.hpPoitions?.length < oldState.hpPoitions?.length) {
+        this.heal(20);
+      }
+    });
   }
 }

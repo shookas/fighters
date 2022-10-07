@@ -18,8 +18,9 @@ export class Store {
   }
 
   dispatch(action: Actions) {
+    const oldState = {...this.state}
     this.state = this.rootReducer(this.state, action);
-    this.listeners.forEach((listener) => listener(this.state));
+    this.listeners.forEach((listener) => listener(this.state, oldState));
   }
 
   subscribe(listener: Function) {

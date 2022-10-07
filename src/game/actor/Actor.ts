@@ -8,7 +8,7 @@ export class Actor extends Physics.Arcade.Sprite {
   /**
    * Probability to deflect damage 0-1
    */
-   deflectionProbability = 0; 
+  deflectionProbability = 0;
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
     super(scene, x, y, texture, frame);
 
@@ -25,6 +25,12 @@ export class Actor extends Physics.Arcade.Sprite {
       }
     }
   }
+
+  public heal(value: number): void {
+    this.actorController.setState(ACTOR_STATES.heal, false, value);
+    this.hp = this.hp + value;
+  }
+
   public getHPValue(): number {
     return this.hp;
   }

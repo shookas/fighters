@@ -1,4 +1,5 @@
 import { html, LitElement } from 'lit-element';
+import { loosePoition } from '../store/actions';
 import { PoitionConfig } from '../game/poition/Poition';
 import { createStore } from '../store';
 import { Store } from '../store/createStore';
@@ -59,22 +60,21 @@ export class UiOverlay extends LitElement {
     return html`
       <ui-icon-with-counter
         class="${hpPoitions.length ? 'interactive' : 'not-clickable'}"
-        @click=${this.handlePickHpPoition.bind(this)}
+        @click=${() => this.handleDrinkPoition(hpPoitions[0])}
         icon="${hpPoitions.length ? 'potion-red' : 'potion-slot'}"
         value="${hpPoitions.length}"
       ></ui-icon-with-counter>
       <ui-icon-with-counter
         class="${staminaPoitions.length ? 'interactive' : 'not-clickable'}"
-        @click=${this.handlePickHpPoition}
+        @click=${() => this.handleDrinkPoition(staminaPoitions[0])}
         icon="${staminaPoitions.length ? 'potion-green' : 'potion-slot'}"
         value="${staminaPoitions.length}"
       ></ui-icon-with-counter>
     `;
   }
 
-  private handlePickHpPoition() {
-    console.log('use poition');
-    
+  private handleDrinkPoition(poition: PoitionConfig) {
+    this.store.dispatch(loosePoition(poition));
   }
 
   private observe() {
