@@ -3,7 +3,7 @@ import { reducer, State } from './reducer';
 
 export class Store {
   private state!: State;
-  private listeners: { listener: Function; scope?: keyof State }[] = [];
+  private listeners: { listener: Function; scope?: Array<keyof State> }[] = [];
   private static instance: Store;
   constructor(private rootReducer: typeof reducer) {
     if (Store.instance) {
@@ -23,7 +23,7 @@ export class Store {
     const changes = this.changeDetector(oldState, this.state);
     this.listeners.forEach(({ listener, scope }) => {
       if (scope) {
-        if (changes.includes(scope)) {
+        if (scope.some(scopeKey => changes.includes(scopeKey))) {
           listener(this.state, oldState);
         }
       } else {
@@ -32,7 +32,7 @@ export class Store {
     });
   }
 
-  subscribe(listener: Function, scope?: keyof State) {
+  subscribe(listener: Function, scope?: Array<keyof State>) {
     this.listeners.push({ listener, scope });
 
     return () => {

@@ -94,7 +94,7 @@ export class Player extends Actor {
     this.scene.input.on(
       'pointerdown',
       (pointer: Phaser.Input.Pointer) => {
-        if (pointer.rightButtonDown()) {
+        if (pointer.button === 2) {
           this.useShield(true);
         }
       },
@@ -136,6 +136,11 @@ export class Player extends Actor {
     this.scene.game.events.emit(EVENTS_NAME.updateHp, this.hp);
   }
 
+  private restoreStamina(value: number) {
+    const valueToAdd = this.stamina + value >= 100 ? 100 - this.stamina : value;
+    this.stamina = this.stamina + valueToAdd;
+  }
+
   public setPlayerPhisics() {
     this.setDepth(0);
     this.getBody().setSize(16, 16);
@@ -173,10 +178,18 @@ export class Player extends Actor {
   }
 
   private observe() {
-    this.store.subscribe((state: State, oldState: State) => {
-      if (state.hpPoitions?.length < oldState.hpPoitions?.length) {
-        this.heal(20);
-      }
-    }, 'hpPoitions');
+    this.store.subscribe(
+      (state: State, oldState: State) => {
+        console.log('drink');
+
+        if (state.hpPoitions?.length < oldState.hpPoitions?.length) {
+          this.heal(20);
+        }
+        if (state.staminaPoitions?.length < oldState.staminaPoitions?.length) {
+          this.restoreStamina(20);
+        }
+      },
+      ['hpPoitions', 'staminaPoitions'],
+    );
   }
 }

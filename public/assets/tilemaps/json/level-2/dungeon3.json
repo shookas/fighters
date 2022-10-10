@@ -715,6 +715,29 @@
                  "width":0,
                  "x":974.666666666667,
                  "y":1368.66666666667
+                }, 
+                {
+                 "class":"",
+                 "height":0,
+                 "id":99,
+                 "name":"PoitionPoint",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"size",
+                         "type":"string",
+                         "value":"big"
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"stamina"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":968,
+                 "y":1421.33333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1188,7 +1211,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":99,
+ "nextobjectid":100,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.1",
