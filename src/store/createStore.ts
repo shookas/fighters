@@ -3,7 +3,7 @@ import { reducer, State } from './reducer';
 
 export class Store {
   private state!: State;
-  private listeners: Function[] = [];
+  private listeners: { listener: Function; scope?: keyof State }[] = [];
   private static instance: Store;
   constructor(private rootReducer: typeof reducer) {
     if (Store.instance) {
@@ -18,16 +18,40 @@ export class Store {
   }
 
   dispatch(action: Actions) {
-    const oldState = {...this.state}
+    const oldState = { ...this.state };
     this.state = this.rootReducer(this.state, action);
-    this.listeners.forEach((listener) => listener(this.state, oldState));
+    const changes = this.changeDetector(oldState, this.state);
+    this.listeners.forEach(({ listener, scope }) => {
+      if (scope) {
+        if (changes.includes(scope)) {
+          listener(this.state, oldState);
+        }
+      } else {
+        listener(this.state, oldState);
+      }
+    });
   }
 
-  subscribe(listener: Function) {
-    this.listeners.push(listener);
+  subscribe(listener: Function, scope?: keyof State) {
+    this.listeners.push({ listener, scope });
 
     return () => {
-      this.listeners = this.listeners.filter((l) => l !== listener);
+      this.listeners = this.listeners.filter((l) => l.listener !== listener);
     };
+  }
+
+  private changeDetector(oldState: State, newState: State): Array<keyof State> {
+    const changes: Array<keyof State> = [];
+    Object.keys(newState).forEach((key) => {
+      const stateKey = key as unknown as keyof State;
+      const change =
+        typeof oldState[stateKey] === 'object'
+          ? JSON.stringify(oldState[stateKey]) !== JSON.stringify(newState[stateKey])
+          : oldState[stateKey] !== newState[stateKey];
+      if (change) {
+        changes.push(stateKey);
+      }
+    });
+    return changes;
   }
 }

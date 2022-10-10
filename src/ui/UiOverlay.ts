@@ -79,7 +79,6 @@ export class UiOverlay extends LitElement {
 
   private observe() {
     this.store.subscribe((state: State) => {
-      console.log('state changed', state);
       this.poitions.hpPoitions = state.hpPoitions;
       this.poitions.staminaPoitions = state.staminaPoitions;
       this.goldAmount = state.gold;

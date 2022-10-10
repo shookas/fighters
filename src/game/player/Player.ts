@@ -177,6 +177,6 @@ export class Player extends Actor {
       if (state.hpPoitions?.length < oldState.hpPoitions?.length) {
         this.heal(20);
       }
-    });
+    }, 'hpPoitions');
   }
 }
