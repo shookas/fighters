@@ -16,11 +16,12 @@ export class Player extends Actor {
   private keyA: Phaser.Input.Keyboard.Key;
   private keyS: Phaser.Input.Keyboard.Key;
   private keyD: Phaser.Input.Keyboard.Key;
+  private keySHIFT: Phaser.Input.Keyboard.Key;
   public weapon?: Weapon;
   public shield?: Shield;
-  public speedModificator = 0;
+  public speedModificator = -25;
   protected stamina = 100;
-  private looseStaminaToken!: NodeJS.Timer;
+  private looseStaminaToken?: NodeJS.Timer;
   private gainStaminaToken!: NodeJS.Timer;
   private store: Store;
 
@@ -28,11 +29,11 @@ export class Player extends Actor {
   public set shieldOn(isOn: boolean) {
     this.gainStamina();
     if (isOn) {
-      this.speedModificator = this.speedModificator = -50;
+      this.speedModificator = -50;
       this.deflectionProbability = 0.5;
       this.looseStaminaToken = this.looseStamina();
     } else {
-      this.speedModificator = 0;
+      this.speedModificator = -25;
       this.deflectionProbability = 0;
       clearTimeout(this.looseStaminaToken!);
     }
@@ -57,6 +58,7 @@ export class Player extends Actor {
     this.keyA = this.scene.input.keyboard.addKey('a');
     this.keyS = this.scene.input.keyboard.addKey('s');
     this.keyD = this.scene.input.keyboard.addKey('d');
+    this.keySHIFT = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
     this.setPlayerPhisics();
 
@@ -66,16 +68,16 @@ export class Player extends Actor {
 
   update(): void {
     this.playerController.setState(PLAYER_STATES.idle, true);
-    if (this.keyUp?.isDown || this.keyW?.isDown) {
+    if (this.keyUp.isDown || this.keyW.isDown) {
       this.playerController.setState(PLAYER_STATES.moveUp);
     }
-    if (this.keyLeft?.isDown || this.keyA?.isDown) {
+    if (this.keyLeft.isDown || this.keyA.isDown) {
       this.playerController.setState(PLAYER_STATES.moveLeft);
     }
-    if (this.keyDown?.isDown || this.keyS?.isDown) {
+    if (this.keyDown.isDown || this.keyS.isDown) {
       this.playerController.setState(PLAYER_STATES.moveDown);
     }
-    if (this.keyRight?.isDown || this.keyD?.isDown) {
+    if (this.keyRight.isDown || this.keyD.isDown) {
       this.playerController.setState(PLAYER_STATES.moveRight);
     }
     this.weapon?.setPosition(this.x, this.y + 8);
@@ -139,6 +141,7 @@ export class Player extends Actor {
   private restoreStamina(value: number) {
     const valueToAdd = this.stamina + value >= 100 ? 100 - this.stamina : value;
     this.stamina = this.stamina + valueToAdd;
+    this.scene.game.events.emit(EVENTS_NAME.updateStamina, this.stamina);
   }
 
   public setPlayerPhisics() {
@@ -146,18 +149,22 @@ export class Player extends Actor {
     this.getBody().setSize(16, 16);
   }
 
-  private looseStamina(): NodeJS.Timer {
+  private looseStamina(): NodeJS.Timer | undefined {
     clearTimeout(this.gainStaminaToken);
     this.gainStaminaToken = null as unknown as NodeJS.Timer;
-    return setInterval(() => {
-      this.stamina = this.stamina <= 0 ? 0 : this.stamina - 1;
-      this.scene.game.events.emit(EVENTS_NAME.updateStamina, this.stamina);
-      if (this.stamina <= 0) {
-        this.useShield(false);
-      }
-    }, 100);
+    if (!this.looseStaminaToken) {
+      return setInterval(() => {
+        this.stamina = this.stamina <= 0 ? 0 : this.stamina - 1;
+        this.scene.game.events.emit(EVENTS_NAME.updateStamina, this.stamina);
+        if (this.stamina <= 0) {
+          this.useShield(false);
+        }
+      }, 200);
+    }
   }
   private gainStamina() {
+    clearTimeout(this.looseStaminaToken);
+    this.looseStaminaToken = null as unknown as NodeJS.Timer;
     if (!this.gainStaminaToken) {
       this.gainStaminaToken = setInterval(() => {
         if (this.stamina < 100) {
@@ -180,8 +187,6 @@ export class Player extends Actor {
   private observe() {
     this.store.subscribe(
       (state: State, oldState: State) => {
-        console.log('drink');
-
         if (state.hpPoitions?.length < oldState.hpPoitions?.length) {
           this.heal(20);
         }
@@ -191,5 +196,19 @@ export class Player extends Actor {
       },
       ['hpPoitions', 'staminaPoitions'],
     );
+
+    this.keySHIFT.on('down', () => {
+      if (!this.shieldOn) {
+        this.speedModificator = 0;
+        this.looseStaminaToken = this.looseStamina();
+      }
+    });
+    this.keySHIFT.on('up', () => {
+      if (!this.shieldOn) {
+        this.speedModificator = -35;
+        this.gainStamina();
+        clearTimeout(this.looseStaminaToken!);
+      }
+    });
   }
 }
